@@ -1,92 +1,103 @@
 # coding=utf-8
-from collections import namedtuple
 import json
+import logging
+import time
+from collections import namedtuple
 
 from Utility.Communication import Communication
 
 
 class CommunicationMediator:
-    sm = None
+    sm = None  # type: ServerMediator
     idData = namedtuple("idData", "data set isException")
 
     idList = {}
     MtxIdList = None
+    logger = logging.getLogger('CommunicationMediator')
 
     def __init__(self, ism):
         self.sm = ism
 
-    def run_command(self, name, data, cid=None, session=None):
-        self.sm.send(Communication.make_command(name, cid, self.sm.owner.getServiceName(), data, session))
+    def runCommand(self, name, data, cid='', session=''):
+        self.sm.send(Communication.make_command(node=name, _id=cid, _from=self.sm.owner.getServiceName(), data=data,
+                                                session=session))
 
-    def run_command_sync(self, name, data, cid=None, session=None):
-        self.sm.send(Communication.make_command(name, id, self.sm.owner.getServiceName(), data, session))
-        x = self.idData("", False)
-        dt = ''
+    def runCommandSync(self, name, data, cid='', session=''):
+        self.sm.send(Communication.make_command(node=name, _id=cid, _from=self.sm.owner.getServiceName(), data=data,
+                                                session=session))
+        x = self.idData(cid, False, False)
+        self.idList[id] = x
+
+        while self.idList[id].set is False:
+            # todo: put a timeout   for commands
+            time.sleep(30)
+        dt = self.idList[id].data
+        del self.idList[id]
         return dt
 
-    def run_callback(self, name, data, id):
-        self.sm.send(Communication.make_callback(name, id, self.sm.owner.getServiceName(), data))
+    def runCallback(self, name, data, id):
+        self.sm.send(Communication.make_callback(node=name, _id=id, _from=self.sm.owner.getServiceName(), data=data))
 
-    def run_event(self, name, data):
+    def runEvent(self, name, data):
         self.sm.send(Communication.make_event(name, self.sm.owner.getServiceName(), data))
 
-    def register_event(self, name):
-        self.sm.send(Communication.make_command("_core.registerEvent", "", self.sm.owner.getServiceName(),
-                                                      "{\"names\" : [" + name + "]}"))
+    def registerEvent(self, name):
+        self.sm.send(
+            Communication.make_command("_core.registerEvent", _id="", _from=self.sm.owner.getServiceName(), data=
+            '{"names" : [' + name + "]}"))
 
-    def remove_event(self, name):
+    def removeEvent(self, name):
         self.sm.send(Communication.make_command("_core.removeEvent", "", self.sm.owner.getServiceName(),
-                                                      "{\"names\" : [" + name + "]}"))
+                                                '{"names" : [' + name + "]}"))
 
-    def register_command(self, name):
+    def registerCommand(self, name):
         self.sm.send(Communication.make_command("_core.registerCommand", "", self.sm.owner.getServiceName(),
-                                                      "{\"names\" : [" + name + "]}"))
+                                                '{"names" : [' + name + "]}"))
 
-    def remove_command(self, name):
+    def removeCommand(self, name):
         self.sm.send(Communication.make_command("_core.removeCommand", "", self.sm.owner.getServiceName(),
-                                                      "{\"names\" : [" + name + "]}"))
+                                                '{"names" : [' + name + "]}"))
 
-    def register_hook(self, name, session=""):
+    def registerHook(self, name, session=""):
         self.sm.send(Communication.make_command("_core.registerHook", "", self.sm.owner.getServiceName(),
-                                                      "{\"names\" : [" + name + "]}"))
+                                                '{"names" : [' + name + "]}"))
 
-    def remove_hook(self, name):
+    def removeHook(self, name):
         self.sm.send(Communication.make_command("_core.registerHook", "", self.sm.owner.getServiceName(),
-                                                      "{\"names\" : [" + name + "]}"))
+                                                '{"names" : [' + name + "]}"))
 
-    def error_report(self, node, id, desc):
+    def errorReport(self, node, id, desc):
         self.sm.send(Communication.make_error(node, id, desc))
 
-    def data_receive(self, data):
+    def dataReceive(self, data):
         js = json.loads(data)
-        id = None
-        dt = None
-
-        id = js["id"]
-        dt = js["data"]
-
-        if id == self.idList.keys()[-1]:
+        try:
+            id = js["id"]
+            dt = js["data"]
+        except:
             return False
-        x = self.idData(self.idList[id])
-        x.data = dt
-        x.set = True
+        if id not in self.idList:
+            return False
+
+        x = self.idData(dt, True, False)
+        self.idList[id] = x
         return True
 
-    def error_receive(self, data):
+    def errorReceive(self, data):
         js = json.loads(data)
-        id = None
-        dt = None
-        id = js["id"]
-        dt = js["data"]["description"]
 
-        if id == self.idList.keys()[-1]:
+        try:
+            id = js["id"]
+            dt = js["data"]["description"]
+        except:
             return False
-        x = self.idData(self.idList[id])
-        x.data = dt
-        x.set = True
-        x.isException = True
+        if id not in self.idList:
+            return False
+
+        x = self.idData(dt, True, True)
+        self.idList[id] = x
         return True
 
     @staticmethod
-    def get_name_and_type():
+    def getNameAndType():
         return "CommunicationMediator"

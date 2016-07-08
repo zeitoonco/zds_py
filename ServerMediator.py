@@ -1,41 +1,51 @@
 # coding=utf-8
 import json
+import logging
 
 from Utility.Communication import Communication
+
 from Utility.TCPClient import TCPClient
+from CommunicationMediator import CommunicationMediator
+from SettingMediator import SettingMediator
+from DatabaseMediator import DatabaseMediator
 
 
 class ServerMediator:
-    owner = None
+    owner = None  # type: CommunicationHandlerInterface
     tcpc = None  # type: TCPClient
-    communication = None
-    setting = None
-    database = None
+    communication = None  # type: CommunicationMediator
+    setting = None  # type: SettingMediator
+    database = None  # type: DatabaseMediator
 
-    def on_net_connect(self):
-        pass
+    logger = logging.getLogger('ServerMediator')
 
-    def on_net_disconnect(self):
-        pass
+    def onNetConnect(self):
+        self.owner.onConnect()
+
+    def onNetDisconnect(self):
+        self.owner.onDisconnect()
 
     def __init__(self, chi):
         self.owner = chi
+        self.communication = CommunicationMediator(self)
+        self.setting = SettingMediator(self)
+        self.database = DatabaseMediator(self)
         self.tcpc = TCPClient()
-        self.tcpc.registerOnMessageCallBack(self.data_received)
-        self.tcpc.registerOnClientConnectCallBack(self.on_net_connect())
-        self.tcpc.registerOnClientDisconnectCallBack(self.on_net_disconnect())
+        self.tcpc.registerOnMessageCallBack(self.dataReceived)
+        self.tcpc.registerOnClientConnectCallBack(self.onNetConnect)
+        self.tcpc.registerOnClientDisconnectCallBack(self.onNetDisconnect)
 
     def connect(self, address=None, port=None):
-        self.tcpc.connect(address, port)
-        self.tcpc.run()
+        self.tcpc.Connect(address, port)
+        self.tcpc.Run()
 
     def disconnect(self):
-        self.tcpc.disconnect()
+        self.tcpc.Disconnect()
 
-    def is_connected(self):
+    def isConnected(self):
         return self.tcpc.isConnected()
 
-    def data_received(self, data):
+    def dataReceived(self, data):
         js = json.loads(data)
 
         type = js["type"]
@@ -48,23 +58,23 @@ class ServerMediator:
             if type == "callback":
                 if self.communication.dataReceive(data):
                     return
-        if type == "call" and node == "error":  # TODO: Check
-            if self.communication.errorReceive(data):
-                return
-        self.owner.datareceive(data)
+            if type == "call" and node == "error":  # TODO: Check
+                if self.communication.errorReceive(data):
+                    return
+            self.owner.datareceive(data)
 
     def send_cmd(self, node, id, data):
-        self.send(Communication.make_command(node, id, self.get_service_name(), data))
+        self.send(Communication.make_command(node, id, self.getServiceName(), data))
 
     def send(self, data):
         self.tcpc.send(data)
 
-    def join_net(self):
-        self.tcpc.joinOnConnectionThread()
+    def joinNet(self):
+        self.tcpc.Join()
 
     @staticmethod
-    def get_name_and_type():
+    def getNameAndType():
         return "ServerMediator"
 
-    def get_service_name(self):
+    def getServiceName(self):
         raise NotImplementedError

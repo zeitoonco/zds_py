@@ -2,11 +2,11 @@
 class DatabaseMediator:
     sm = None
 
-    def wrap_sql_cmd(self, sql):
-        pass
-
     def __init__(self, ism):
         self.sm = ism
+
+    def wrap_sql_cmd(self, sql):
+        pass
 
     def query(self, cmd):
         pass
