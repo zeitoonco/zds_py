@@ -1,27 +1,28 @@
 # coding=utf-8
+import json
 class DatabaseMediator:
     sm = None
 
     def __init__(self, ism):
         self.sm = ism
 
-    def wrap_sql_cmd(self, sql):
-        pass
+    def wrapSqlCmd(self, sql):
+        return '{"query":"' + json.dumps(sql) + '"}'
 
     def query(self, cmd):
-        pass
+        self.sm.communication.runCommand("database.query", self.wrapSqlCmd(cmd))
 
-    def query_sync(self, cmd):
+    def querySync(self, cmd):
         pass
 
     def execute(self, cmd):
+        self.sm.communication.runCommand("database.execute", self.wrapSqlCmd(cmd))
+
+    def executeSync(self, cmd):
         pass
 
-    def execute_sync(self, cmd):
-        pass
+    def singleFieldQuery(self, cmd):  #from? which node? applies to all these methods
+        self.sm.communication.runCommand("database.singlefieldquery", self.wrapSqlCmd(cmd))
 
-    def single_field_query(self, cmd):
-        pass
-
-    def single_field_query_sync(self, cmd):
+    def singleFieldQuerySync(self, cmd):
         pass
