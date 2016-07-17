@@ -90,12 +90,12 @@ class CommunicationHandlerInterface:
                 self.sm.send(
                     '{"type" : "internal" , "node" : "hello" , "name" : "' + str(self.getServiceName()) +
                     '" , "version" : ' + str(self.getServiceVersion()) +
-                    ' , "id" : "' + (str(id) + '"' if len(id) > 0 else "") + "}")
+                    (' , "id" : "' + (str(id) + '"') if len(id) > 0 else "") + "}")
 
         else:
             dataj = js["data"] if 'data' in js else ""
             fromj = js["from"] if 'from' in js else ""
-            idj = js["id"]
+            idj = js["id"]     if 'id'   in js else ""
             data = "" if dataj is None else dataj
             _from = "" if fromj is None else fromj
             id = "" if idj is None else  idj
@@ -134,7 +134,8 @@ class CommunicationHandlerInterface:
                     self.onWarning(dataj["level"], dataj["node"], dataj["id"],
                                    dataj["description"])
                 elif node.lower() == "getInstallInfo".lower():
-                    self.sm.send(Communication.make_callback("getInstallInfo",  self.getInstallInfo(), id,self.getServiceName()))
+                    self.sm.send(
+                        Communication.make_callback("getInstallInfo", self.getInstallInfo(), id, self.getServiceName()))
                 elif node.lower() == "changeDatatypeVersion".lower():
                     if dataj is '':
                         raise ValueError("onInstall: Data field is empty!")
