@@ -1,5 +1,11 @@
 # coding=utf-8
 import json
+
+from DataTypes.Structs import DSInteger, DSString
+from DataTypes.TableString import DTTableString
+from Utility.Communication import Communication
+
+
 class DatabaseMediator:
     sm = None
 
@@ -13,16 +19,22 @@ class DatabaseMediator:
         self.sm.communication.runCommand("database.query", self.wrapSqlCmd(cmd))
 
     def querySync(self, cmd):
-        pass
+        return DTTableString("", self.sm.communication.runCommandSync("database.query", self.wrapSqlCmd(cmd),
+                                                                      Communication.get_random_id()))
 
     def execute(self, cmd):
         self.sm.communication.runCommand("database.execute", self.wrapSqlCmd(cmd))
 
     def executeSync(self, cmd):
-        pass
+        res = DSInteger(self.sm.communication.runCommandSync("database.execute", self.wrapSqlCmd(cmd),
+                                                             Communication.get_random_id()))
+        return res.value
 
-    def singleFieldQuery(self, cmd):  #from? which node? applies to all these methods
+    def singleFieldQuery(self, cmd):  # from? which node? applies to all these methods
         self.sm.communication.runCommand("database.singlefieldquery", self.wrapSqlCmd(cmd))
 
     def singleFieldQuerySync(self, cmd):
-        pass
+        res = DSString(self.sm.communication.runCommandSync("database.singlefieldquery", self.wrapSqlCmd(cmd),
+                                                            Communication.get_random_id()))
+
+        return res.value

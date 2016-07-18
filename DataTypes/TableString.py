@@ -49,6 +49,7 @@ class DTTableString:
     def fromString(self, data):
         self.jsonData = json.loads(data)
 
+    # Necessary ?
     # DTBase &operator=(std::string)
     #
     # DTBase &operator=(DTBase &dtvar)
