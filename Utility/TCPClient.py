@@ -202,6 +202,7 @@ class TCPClient:
         TCPClientCallBackHolder.ClientDisconnectCallBack = on_net_disconnect
 
     def send(self, data):
+        print data
         TCPClient.pendingBuffs.put(data)
 
     def isConnected(self):

@@ -11,10 +11,11 @@ class Communication:
 
     @staticmethod
     def get_random_id():
-        return random.random
+        return random.randint(100000000,999999999)
 
     @staticmethod
     def make_command(node, data, _id="", _from="", session=""):
+        _id = str(_id)
         return ('{"type" : "call" , "node" : "' + node + '" ' +
                 ((', "id" : "' + _id + '" ') if len(_id) > 0 else "") +
                 ((', "from" : "' + _from + '" ') if len(_from) > 0 else "") +

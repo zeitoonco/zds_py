@@ -1,4 +1,6 @@
 # coding=utf-8
+import json
+import os
 
 import CommunicationHandlerInterface
 from DataTypes.InstallInfo import InstallInfo
@@ -12,13 +14,19 @@ class HelloWorld(CommunicationHandlerInterface.CommunicationHandlerInterface):
         return 0.1
 
     def getInstallID(self):
-        return '1041053949'
+        if os.path.exists('config.json'):
+            with open('config.json') as data_file:
+                data = json.load(data_file)
+                if len(data) > 0:
+                    return str(data)
+        return ''
 
     def onInstall(self, id):
-        pass;
+        with open('config.json', 'w') as outfile:
+            json.dump(id, outfile)
 
     def onEnable(self):
-        pass
+        self.sm.database.query('CREATE TABLE "helloworldtest"(  id integer NOT NULL  name TEXT NOT NULL,)')
 
     def getInstallInfo(self):
         info = InstallInfo()
@@ -27,8 +35,8 @@ class HelloWorld(CommunicationHandlerInterface.CommunicationHandlerInterface):
         return info.toJSON()
 
     def onConnect(self):
-        # self.sm.communication.runCommand("turnoff", json.dumps({'id': 12}))
         pass
+        # self.sm.communication.runCommand("turnoff", json.dumps({'id': 12}))
 
     def onError(self, node, id, description):
         pass
