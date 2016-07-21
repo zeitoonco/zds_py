@@ -26,7 +26,7 @@ class HelloWorld(CommunicationHandlerInterface.CommunicationHandlerInterface):
             json.dump(id, outfile)
 
     def onEnable(self):
-        self.sm.database.query('CREATE TABLE "helloworldtest"(  id integer NOT NULL  name TEXT NOT NULL,)')
+        self.sm.database.query('CREATE TABLE "helloworldtest"(  id integer NOT NULL  ,name TEXT NOT NULL)')
 
     def getInstallInfo(self):
         info = InstallInfo()
