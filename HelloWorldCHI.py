@@ -28,13 +28,15 @@ class HelloWorld(CommunicationHandlerInterface.CommunicationHandlerInterface):
     def onInstall(self, id):
         with open('config.json', 'w') as outfile:
             json.dump(id, outfile)
+        self.sm.database.executeSync('CREATE TABLE "helloworldtest"(  id integer NOT NULL  ,name TEXT NOT NULL)')
+
 
     def onEnable(self):
         # self.sm.database.query('CREATE TABLE "helloworldtest"(  id integer NOT NULL  ,name TEXT NOT NULL)')
         print "Running..."
-        res = self.sm.communication.runCommandSync("_core.getServiceInfo", json.dumps({'name': self.getServiceName()}),
-                                                   cid=Communication.get_random_id())
-        print "Ok" + res
+        res = self.sm.database.querySync('SELECT * FROM "HelloWorldCHI".helloworldtest')
+
+        print "Ok"
 
     def getInstallInfo(self):
         info = InstallInfo()

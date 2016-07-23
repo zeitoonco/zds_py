@@ -47,7 +47,10 @@ class DTTableString:
         return json.dumps(self.jsonData)
 
     def fromString(self, data):
-        self.jsonData = json.loads(data)
+        if isinstance(data, dict):
+            self.jsonData = data
+        else:
+            self.jsonData = json.loads(data)
 
     # Necessary ?
     # DTBase &operator=(std::string)

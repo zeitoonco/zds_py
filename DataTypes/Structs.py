@@ -11,13 +11,15 @@ class DSString:
     def getStructVersion(self):
         return 1
 
-    def __init__(self, data='', isJSON=True):
+    def __init__(self, data='', isJSON=False):
         if (isJSON):
             try:
                 v = json.loads(data)
                 self.value = v['value']
             except:
                 raise
+        elif 'value' in data:
+            self.value = data["value"]
         else:
             self.value = data
 
