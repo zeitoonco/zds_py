@@ -26,13 +26,16 @@ class CommunicationMediator:
         self.sm.send(Communication.make_command(node=name, _id=cid, _from=self.sm.owner.getServiceName(), data=data,
                                                 session=session))
         x = self.idData(cid, False, False)
-        self.idList[id] = x
+        cid = str(cid)
+        self.idList[cid] = x
 
-        while self.idList[id].set is False:
+        while self.idList[cid].set is False:
             # todo: put a timeout   for commands
-            time.sleep(30)
-        dt = self.idList[id].data
-        del self.idList[id]
+            time.sleep(0.030)
+        dt = self.idList[cid].data
+        if self.idList[cid].isException:
+            raise "Error received from Core: " + dt
+        del self.idList[cid]
         return dt
 
     def runCallback(self, name, data, id):
@@ -72,7 +75,7 @@ class CommunicationMediator:
     def dataReceive(self, data):
         js = json.loads(data)
         try:
-            id = js["id"]
+            id = str(js["id"])
             dt = js["data"]
         except:
             return False
@@ -87,7 +90,7 @@ class CommunicationMediator:
         js = json.loads(data)
 
         try:
-            id = js["id"]
+            id = str(js["data"]["id"])
             dt = js["data"]["description"]
         except:
             return False

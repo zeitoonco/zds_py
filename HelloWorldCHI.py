@@ -1,12 +1,16 @@
 # coding=utf-8
 import json
+import logging
 import os
 
 import CommunicationHandlerInterface
 from DataTypes.InstallInfo import InstallInfo
+from Utility.Communication import Communication
 
 
 class HelloWorld(CommunicationHandlerInterface.CommunicationHandlerInterface):
+    logger = logging.getLogger('HelloWorld')
+
     def getServiceName(self):
         return "HelloWorldCHI"
 
@@ -26,7 +30,11 @@ class HelloWorld(CommunicationHandlerInterface.CommunicationHandlerInterface):
             json.dump(id, outfile)
 
     def onEnable(self):
-        self.sm.database.query('CREATE TABLE "helloworldtest"(  id integer NOT NULL  ,name TEXT NOT NULL)')
+        # self.sm.database.query('CREATE TABLE "helloworldtest"(  id integer NOT NULL  ,name TEXT NOT NULL)')
+        print "Running..."
+        res = self.sm.communication.runCommandSync("_core.getServiceInfo", json.dumps({'name': self.getServiceName()}),
+                                                   cid=Communication.get_random_id())
+        print "Ok" + res
 
     def getInstallInfo(self):
         info = InstallInfo()
@@ -39,6 +47,9 @@ class HelloWorld(CommunicationHandlerInterface.CommunicationHandlerInterface):
         # self.sm.communication.runCommand("turnoff", json.dumps({'id': 12}))
 
     def onError(self, node, id, description):
+        pass
+
+    def onCallback(self, node, data, id, _from):
         pass
 
     def pong(self, id, miliseconds):

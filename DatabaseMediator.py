@@ -1,5 +1,6 @@
 # coding=utf-8
 import json
+import logging
 
 from DataTypes.Structs import DSInteger, DSString
 from DataTypes.TableString import DTTableString
@@ -7,6 +8,8 @@ from Utility.Communication import Communication
 
 
 class DatabaseMediator:
+    logger = logging.getLogger('DatabaseMediator')
+
     sm = None
 
     def __init__(self, ism):

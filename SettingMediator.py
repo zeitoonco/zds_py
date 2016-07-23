@@ -1,9 +1,11 @@
 # coding=utf-8
 import json
+import logging
 
 
 class SettingMediator:
     sm = None
+    logger = logging.getLogger('SettingMediator')
 
     def __init__(self, ism):
         self.sm = ism
