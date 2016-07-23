@@ -95,7 +95,7 @@ class CommunicationHandlerInterface:
         else:
             dataj = js["data"] if 'data' in js else ""
             fromj = js["from"] if 'from' in js else ""
-            idj = js["id"]     if 'id'   in js else ""
+            idj = js["id"] if 'id' in js else ""
             data = "" if dataj is None else dataj
             _from = "" if fromj is None else fromj
             id = "" if idj is None else  idj

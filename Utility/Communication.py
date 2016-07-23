@@ -11,7 +11,7 @@ class Communication:
 
     @staticmethod
     def get_random_id():
-        return random.randint(100000000,999999999)
+        return random.randint(100000000, 999999999)
 
     @staticmethod
     def make_command(node, data, _id="", _from="", session=""):

@@ -5,7 +5,6 @@ import os
 
 import CommunicationHandlerInterface
 from DataTypes.InstallInfo import InstallInfo
-from Utility.Communication import Communication
 
 
 class HelloWorld(CommunicationHandlerInterface.CommunicationHandlerInterface):
@@ -28,8 +27,7 @@ class HelloWorld(CommunicationHandlerInterface.CommunicationHandlerInterface):
     def onInstall(self, id):
         with open('config.json', 'w') as outfile:
             json.dump(id, outfile)
-        self.sm.database.executeSync('CREATE TABLE "helloworldtest"(  id integer NOT NULL  ,name TEXT NOT NULL)')
-
+        self.sm.database.executeSync('CREATE TABLE "helloworldtest"(  id INTEGER NOT NULL  ,name TEXT NOT NULL)')
 
     def onEnable(self):
         # self.sm.database.query('CREATE TABLE "helloworldtest"(  id integer NOT NULL  ,name TEXT NOT NULL)')

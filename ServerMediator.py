@@ -2,12 +2,11 @@
 import json
 import logging
 
-from Utility.Communication import Communication
-
-from Utility.TCPClient import TCPClient
 from CommunicationMediator import CommunicationMediator
-from SettingMediator import SettingMediator
 from DatabaseMediator import DatabaseMediator
+from SettingMediator import SettingMediator
+from Utility.Communication import Communication
+from Utility.TCPClient import TCPClient
 
 
 class ServerMediator:
