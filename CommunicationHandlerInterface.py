@@ -23,7 +23,7 @@ class CommunicationHandlerInterface:
         self.sm.send('{"type" : "internal" , "node" : "ping" , "id" : "' + _id + '"}')
         return _id
 
-    def onCommand(self, node, data, id, _from):
+    def onCommand(self, node, data, _id, _from):
         raise NotImplementedError()
 
     def onCallback(self, node, data, id, _from):

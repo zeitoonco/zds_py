@@ -90,3 +90,8 @@ ENV/
 '.idea'
 'config.json'
 /config.json
+/test.json
+/AccountingRelayCHI.config.json
+/WebSocket/
+/WebSocket/index.html
+/WebSocket/jquery-2.2.1.js

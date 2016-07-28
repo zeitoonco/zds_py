@@ -5,13 +5,14 @@ import os
 
 import CommunicationHandlerInterface
 from DataTypes.InstallInfo import InstallInfo
+from Utility.Communication import Communication
 
 
 class AccountingRelay(CommunicationHandlerInterface.CommunicationHandlerInterface):
     logger = logging.getLogger('HelloWorld')
 
     def getServiceName(self):
-        return "AccountingRelayCHI"
+        return "AccountingRelay"
 
     def getServiceVersion(self):
         return 0.1
@@ -25,10 +26,11 @@ class AccountingRelay(CommunicationHandlerInterface.CommunicationHandlerInterfac
         return ''
 
     def onInstall(self, id):
-        with open('AccountingRelayCHIconfig.json', 'w') as outfile:
+        with open('AccountingRelayCHI.config.json', 'w') as outfile:
             json.dump(id, outfile)
         with open('AccountingRelay.sql') as sql:
-            self.sm.database.executeSync(sql.read())
+            s = sql.read().replace("\n", " ")
+            self.sm.database.executeSync(s)
 
     def onEnable(self):
         # # self.sm.database.query('CREATE TABLE "helloworldtest"(  id integer NOT NULL  ,name TEXT NOT NULL)')
@@ -36,12 +38,25 @@ class AccountingRelay(CommunicationHandlerInterface.CommunicationHandlerInterfac
         # res = self.sm.database.querySync('SELECT * FROM "HelloWorldCHI".helloworldtest')
         #
         # print "Ok"
-        pass
+
+        self.sm.communication.registerCommand('"AccountingRelay.getConfig","AccountingRelay.setConfig"')
 
     def getInstallInfo(self):
         info = InstallInfo()
         info.name = 'AccountingRelay'
         info.title = 'Accounting Relay'
+        info.datatypes.append({"name": "AccountingRelay.genericInput", "version": 1})
+        info.datatypes.append({"name": "AccountingRelay.genericOutput", "version": 1})
+        info.commands.append({"name": "AccountingRelay.getConfig",
+                              "inputdatatype": "AccountingRelay.genericInput",
+                              "inputdatatypeversion": 1,
+                              "outputdatatype": "AccountingRelay.genericOutput",
+                              "outputdatatypeversion": 1})
+        info.commands.append({"name": "AccountingRelay.setConfig",
+                              "inputdatatype": "AccountingRelay.genericInput",
+                              "inputdatatypeversion": 1,
+                              "outputdatatype": "AccountingRelay.genericOutput",
+                              "outputdatatypeversion": 1})
         return info.toJSON()
 
     def onConnect(self):
@@ -59,3 +74,6 @@ class AccountingRelay(CommunicationHandlerInterface.CommunicationHandlerInterfac
             '{"type" : "internal" , "node" : "ping" , "name" : "' + self.getServiceName() +
             '" , "version" : "5"'
             + ((' , "id" : "' + self.getInstallID() + '"') if len(id) > 0  else "") + "}")
+
+    def onCommand(self, node, data, _id, _from):
+        self.sm.communication.runCallback(name=node, data='"OK"', id=_id)

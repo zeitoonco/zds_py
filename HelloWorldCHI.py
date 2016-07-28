@@ -40,6 +40,7 @@ class HelloWorld(CommunicationHandlerInterface.CommunicationHandlerInterface):
         info = InstallInfo()
         info.name = 'HelloWorldCHI'
         info.title = 'Hello World'
+        info.datatypes.append({''})
         return info.toJSON()
 
     def onConnect(self):
@@ -56,4 +57,4 @@ class HelloWorld(CommunicationHandlerInterface.CommunicationHandlerInterface):
         self.sm.send(
             '{"type" : "internal" , "node" : "ping" , "name" : "' + self.getServiceName() +
             '" , "version" : "5"'
-            + ((' , "id" : "' + self.getInstallID() + '"') if len(id) > 0  else "") + "}")
+            + ((' , "id" : "' + self.getInstallID() + '"') if len(id) > 0 else "") + "}")

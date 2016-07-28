@@ -34,7 +34,7 @@ class CommunicationMediator:
             time.sleep(0.030)
         dt = self.idList[cid].data
         if self.idList[cid].isException:
-            raise "Error received from Core: " + dt
+            raise Exception("Error received from Core: " + dt)
         del self.idList[cid]
         return dt
 
@@ -46,28 +46,30 @@ class CommunicationMediator:
 
     def registerEvent(self, name):
         self.sm.send(
-            Communication.make_command("_core.registerEvent", _id="", _from=self.sm.owner.getServiceName(), data=
-            '{"names" : [' + name + "]}"))
+            Communication.make_command(node="_core.registerEvent", _id="", _from=self.sm.owner.getServiceName(),
+                                       data='{"names" : [' + name + "]}"))
 
     def removeEvent(self, name):
-        self.sm.send(Communication.make_command("_core.removeEvent", "", self.sm.owner.getServiceName(),
-                                                '{"names" : [' + name + "]}"))
+        self.sm.send(Communication.make_command(node="_core.removeEvent", _id="", _from=self.sm.owner.getServiceName(),
+                                                data='{"names" : [' + name + "]}"))
 
     def registerCommand(self, name):
-        self.sm.send(Communication.make_command("_core.registerCommand", "", self.sm.owner.getServiceName(),
-                                                '{"names" : [' + name + "]}"))
+        self.sm.send(
+            Communication.make_command(node="_core.registerCommand", _id="", _from=self.sm.owner.getServiceName(),
+                                       data='{"names" : [' + name + "]}"))
 
     def removeCommand(self, name):
-        self.sm.send(Communication.make_command("_core.removeCommand", "", self.sm.owner.getServiceName(),
-                                                '{"names" : [' + name + "]}"))
+        self.sm.send(
+            Communication.make_command(node="_core.removeCommand", _id="", _from=self.sm.owner.getServiceName(),
+                                       data='{"names" : [' + name + "]}"))
 
     def registerHook(self, name, session=""):
-        self.sm.send(Communication.make_command("_core.registerHook", "", self.sm.owner.getServiceName(),
-                                                '{"names" : [' + name + "]}"))
+        self.sm.send(Communication.make_command(node="_core.registerHook", _id="", _from=self.sm.owner.getServiceName(),
+                                                data='{"names" : [' + name + "]}"))
 
     def removeHook(self, name):
-        self.sm.send(Communication.make_command("_core.registerHook", "", self.sm.owner.getServiceName(),
-                                                '{"names" : [' + name + "]}"))
+        self.sm.send(Communication.make_command(node="_core.registerHook", _id="", _from=self.sm.owner.getServiceName(),
+                                                data='{"names" : [' + name + "]}"))
 
     def errorReport(self, node, id, desc):
         self.sm.send(Communication.make_error(node, id, desc))

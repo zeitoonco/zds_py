@@ -17,11 +17,12 @@ class InstallInfo:
     } }
 
     '''
-    commands = {}
-    events = {}
-    hooks = {}
-    requirements = {}
-    datatypes = {}
+    commands = []
+    events = []
+    hooks = []
+    requirements = []
+    datatypes = []
 
     def toJSON(self):
-        return json.dumps(self.__dict__)
+        return json.dumps(dict(self.__dict__, **{"commands": self.commands, "events": self.events, "hooks": self.hooks,
+                                                 "requirements": self.requirements, "datatypes": self.datatypes}))
