@@ -5,7 +5,6 @@ import os
 
 import CommunicationHandlerInterface
 from DataTypes.InstallInfo import InstallInfo
-from Utility.Communication import Communication
 
 
 class AccountingRelay(CommunicationHandlerInterface.CommunicationHandlerInterface):
@@ -76,4 +75,12 @@ class AccountingRelay(CommunicationHandlerInterface.CommunicationHandlerInterfac
             + ((' , "id" : "' + self.getInstallID() + '"') if len(id) > 0  else "") + "}")
 
     def onCommand(self, node, data, _id, _from):
+        op = getattr(self, str(node).replace(self.getServiceName(), '').replace('.', ''), None)
+        if callable(op):
+            op(data, _id, _from, node)
+        else:
+            raise NotImplementedError
+
+    def getConfig(self, data, _id, _from, node):
         self.sm.communication.runCallback(name=node, data='"OK"', id=_id)
+        print 'ok?'
