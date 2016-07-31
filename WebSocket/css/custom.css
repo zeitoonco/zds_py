@@ -28,3 +28,51 @@ body {
     padding: 40px 15px;
     text-align: center;
 }
+
+span[class*="glyphicon-one-fine"] {
+    margin-bottom: -.8em;
+    overflow: hidden;
+}
+.glyphicon-one-fine-red-dot:before {
+    content:"\25cf";
+    font-size: 3em;
+    color: red;
+}
+.glyphicon-one-fine-full-dot:before {
+    content:"\25cf";
+    font-size: 3em;
+}
+.glyphicon-one-fine-empty-dot:before {
+    content:"\25cb";
+    font-size: 3em;
+}
+
+
+.bs-group
+{
+    position: relative;
+    margin: 15px 0;
+    padding: 39px 19px 14px;
+    background-color: white;
+    border: 1px solid #DDD;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+
+.bs-group::after
+{
+    content: "فرم";
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    padding: 3px 7px;
+    font-size: 12px;
+    font-weight: bold;
+    background-color: whiteSmoke;
+    border: 1px solid #DDD;
+    color: #9DA0A4;
+    -webkit-border-radius: 4px 0 4px 0;
+    -moz-border-radius: 4px 0 4px 0;
+    border-radius: 4px 0 4px 0;
+}

@@ -11,8 +11,13 @@
 
     <script src="jquery-2.2.1.js"></script>
     <script src="js/bootstrap.min.js"></script>
-
+    <script type="text/javascript" src="jsonform/deps/underscore.js"></script>
+    <script type="text/javascript" src="jsonform/deps/opt/jsv.js"></script>
+    <script type="text/javascript" src="jsonform/lib/jsonform.js"></script>
+    <script type="text/javascript" src="toastr/toastr.min.js"></script>
+    <script type="text/javascript" src="js/customform.js"></script>
     <link rel="stylesheet" href="css/custom.css">
+    <link rel="stylesheet" href="toastr/toastr.css">
 </head>
 <body>
 
@@ -26,7 +31,8 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">حساب داری</a>
+            <a class="navbar-brand" href="#"><span style="color: red; font-size: 20px;" id="statusColor">●</span> حساب
+                داری</a>
         </div>
     </div>
 </nav>
@@ -68,10 +74,47 @@
 
             <!-- Tab panes -->
             <div class="tab-content">
-                <div role="tabpanel" class="tab-pane active" id="home">...</div>
-                <div role="tabpanel" class="tab-pane" id="profile">...</div>
-                <div role="tabpanel" class="tab-pane" id="messages">...</div>
-                <div role="tabpanel" class="tab-pane" id="settings">...</div>
+                <div role="tabpanel" class="tab-pane active" id="home">
+                    <div>
+                        <input type="text" id="wshost" placeholder="آدرس وب سوکت" value="192.168.37.133">
+                        <input type="text" id="wsport" placeholder="پورت وب سوکت" value="5455">
+                        <a href="#" class="btn  btn-default" id="connect">اتصال</a>
+                        <a href="#" class="btn  btn-danger" id="disconnect">قطع</a>
+                    </div>
+                    <div>
+                        <input type="text" id="iUser" placeholder="نام کاربری">
+                        <input type="password" id="iPass" placeholder="رمز">
+                        <input type="button" id="login" value="ورود">
+                        کد Session:<span id="sessionid"></span>
+                    </div>
+
+                </div>
+                <div role="tabpanel" class="tab-pane" id="Account">
+                    <form id="newAccount" class="bs-group"></form>
+                    <form id="modifyAccount" class="bs-group"></form>
+                    <form id="removeAccount" class="bs-group"></form>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="Category">
+                    <form id="addCategory" class="bs-group"></form>
+                    <form id="modifyCategory" class="bs-group"></form>
+                    <form id="removeCategory" class="bs-group"></form>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="Location">...</div>
+                <div role="tabpanel" class="tab-pane" id="Party">...</div>
+                <div role="tabpanel" class="tab-pane" id="Cash">...</div>
+                <div role="tabpanel" class="tab-pane" id="CostCenter">...</div>
+                <div role="tabpanel" class="tab-pane" id="Bank">...</div>
+                <div role="tabpanel" class="tab-pane" id="Currency">...</div>
+                <div role="tabpanel" class="tab-pane" id="FiscalYear">...</div>
+                <div role="tabpanel" class="tab-pane" id="Topic">
+                    <form id="newTopic" class="bs-group form-horizontal"></form>
+                    <form id="modifyTopic" class="bs-group form-horizontal"></form>
+                    <form id="removeTopic" class="bs-group form-horizontal"></form>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="Voucher">...</div>
+                <div role="tabpanel" class="tab-pane" id="DL">...</div>
+                <div role="tabpanel" class="tab-pane" id="Tables">...</div>
+                <div role="tabpanel" class="tab-pane" id="Version">...</div>
             </div>
 
         </div>
