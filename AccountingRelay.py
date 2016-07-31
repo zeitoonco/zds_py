@@ -76,11 +76,220 @@ class AccountingRelay(CommunicationHandlerInterface.CommunicationHandlerInterfac
 
     def onCommand(self, node, data, _id, _from):
         op = getattr(self, str(node).replace(self.getServiceName(), '').replace('.', ''), None)
-        if callable(op):
-            op(data, _id, _from, node)
+        whitelist = ["getConfig", "setConfig", "newFiscalYear", "modifyFiscalYear", "closeFiscalYear",
+                     "removeFiscalYear", "newAccount", "modifyAccount", "removeAccount", "newDl", "modifyDL",
+                     "removeDL", "activeDL", "deactiveDL", "newCategory", "modifyCategory", "removeCategory",
+                     "newTopic", "modifyTopic", "removeTopic", "addAccountTopic", "removeAccountTopic", "newVoucher",
+                     "modifyVoucher", "removeVoucher", "finalizeVoucher", "newVoucherItem", "modifyVoucherItem",
+                     "removeVoucherItem", "newGLVoucher", "removeGLVoucher", "newGLVoucherItem", "removeGLVoucherItem",
+                     "newCash", "modifyCash", "removeCash", "newCostCenter", "modifyCostCenter", "removeCostCenter",
+                     "newParty", "modifyParty", "removeParty", "addPartyBlacklist", "removePartyBlacklist", "newBank",
+                     "modifyBank", "removeBank", "newBankAccountType", "modifyBankAccountType", "removeBankAccountType",
+                     "newBankAccount", "modifyBankAccount", "removeBankAccount", "newBankBranch", "modifyBankBranch",
+                     "removeBankBranch", "newCurrency", "modifyCurrency", "removeCurrency", "newCurrencyExchangeRate",
+                     "modifyCurrencyExchangeRate", "removeCurrencyExchangeRate", "newLocation", "modifyLocation",
+                     "removeLocation"]
+        if callable(op) and str(node).replace(self.getServiceName(), '').replace('.', '') in whitelist:
+            try:
+                res = op(data, _id, _from, node)
+                self.sm.communication.runCallback(name=node, data=res, id=_id)
+            except:
+                self.sm.communication.runCallback(name=node, data="{'error': True}", id=_id)
         else:
             raise NotImplementedError
 
     def getConfig(self, data, _id, _from, node):
-        self.sm.communication.runCallback(name=node, data='"OK"', id=_id)
         print 'ok?'
+
+    def setConfig(self, data, _id, _from, node):
+        sql = "Blah Blah Blah"
+        # self.SafeCall(sql,_id,_from,node)
+
+    def newFiscalYear(self, data, _id, _from, node):
+        pass
+
+    def modifyFiscalYear(self, data, _id, _from, node):
+        pass
+
+    def closeFiscalYear(self, data, _id, _from, node):
+        pass
+
+    def removeFiscalYear(self, data, _id, _from, node):
+        pass
+
+    def newAccount(self, data, _id, _from, node):
+        pass
+
+    def modifyAccount(self, data, _id, _from, node):
+        pass
+
+    def removeAccount(self, data, _id, _from, node):
+        pass
+
+    def newDl(self, data, _id, _from, node):
+        pass
+
+    def modifyDL(self, data, _id, _from, node):
+        pass
+
+    def removeDL(self, data, _id, _from, node):
+        pass
+
+    def activeDL(self, data, _id, _from, node):
+        pass
+
+    def deactiveDL(self, data, _id, _from, node):
+        pass
+
+    def newCategory(self, data, _id, _from, node):
+        pass
+
+    def modifyCategory(self, data, _id, _from, node):
+        pass
+
+    def removeCategory(self, data, _id, _from, node):
+        pass
+
+    def newTopic(self, data, _id, _from, node):
+        pass
+
+    def modifyTopic(self, data, _id, _from, node):
+        pass
+
+    def removeTopic(self, data, _id, _from, node):
+        pass
+
+    def addAccountTopic(self, data, _id, _from, node):
+        pass
+
+    def removeAccountTopic(self, data, _id, _from, node):
+        pass
+
+    def newVoucher(self, data, _id, _from, node):
+        pass
+
+    def modifyVoucher(self, data, _id, _from, node):
+        pass
+
+    def removeVoucher(self, data, _id, _from, node):
+        pass
+
+    def finalizeVoucher(self, data, _id, _from, node):
+        pass
+
+    def newVoucherItem(self, data, _id, _from, node):
+        pass
+
+    def modifyVoucherItem(self, data, _id, _from, node):
+        pass
+
+    def removeVoucherItem(self, data, _id, _from, node):
+        pass
+
+    def newGLVoucher(self, data, _id, _from, node):
+        pass
+
+    def removeGLVoucher(self, data, _id, _from, node):
+        pass
+
+    def newGLVoucherItem(self, data, _id, _from, node):
+        pass
+
+    def removeGLVoucherItem(self, data, _id, _from, node):
+        pass
+
+    def newCash(self, data, _id, _from, node):
+        pass
+
+    def modifyCash(self, data, _id, _from, node):
+        pass
+
+    def removeCash(self, data, _id, _from, node):
+        pass
+
+    def newCostCenter(self, data, _id, _from, node):
+        pass
+
+    def modifyCostCenter(self, data, _id, _from, node):
+        pass
+
+    def removeCostCenter(self, data, _id, _from, node):
+        pass
+
+    def newParty(self, data, _id, _from, node):
+        pass
+
+    def modifyParty(self, data, _id, _from, node):
+        pass
+
+    def removeParty(self, data, _id, _from, node):
+        pass
+
+    def addPartyBlacklist(self, data, _id, _from, node):
+        pass
+
+    def removePartyBlacklist(self, data, _id, _from, node):
+        pass
+
+    def newBank(self, data, _id, _from, node):
+        pass
+
+    def modifyBank(self, data, _id, _from, node):
+        pass
+
+    def removeBank(self, data, _id, _from, node):
+        pass
+
+    def newBankAccountType(self, data, _id, _from, node):
+        pass
+
+    def modifyBankAccountType(self, data, _id, _from, node):
+        pass
+
+    def removeBankAccountType(self, data, _id, _from, node):
+        pass
+
+    def newBankAccount(self, data, _id, _from, node):
+        pass
+
+    def modifyBankAccount(self, data, _id, _from, node):
+        pass
+
+    def removeBankAccount(self, data, _id, _from, node):
+        pass
+
+    def newBankBranch(self, data, _id, _from, node):
+        pass
+
+    def modifyBankBranch(self, data, _id, _from, node):
+        pass
+
+    def removeBankBranch(self, data, _id, _from, node):
+        pass
+
+    def newCurrency(self, data, _id, _from, node):
+        pass
+
+    def modifyCurrency(self, data, _id, _from, node):
+        pass
+
+    def removeCurrency(self, data, _id, _from, node):
+        pass
+
+    def newCurrencyExchangeRate(self, data, _id, _from, node):
+        pass
+
+    def modifyCurrencyExchangeRate(self, data, _id, _from, node):
+        pass
+
+    def removeCurrencyExchangeRate(self, data, _id, _from, node):
+        pass
+
+    def newLocation(self, data, _id, _from, node):
+        pass
+
+    def modifyLocation(self, data, _id, _from, node):
+        pass
+
+    def removeLocation(self, data, _id, _from, node):
+        pass
