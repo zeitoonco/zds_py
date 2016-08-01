@@ -99,197 +99,449 @@ class AccountingRelay(CommunicationHandlerInterface.CommunicationHandlerInterfac
             raise NotImplementedError
 
     def getConfig(self, data, _id, _from, node):
-        print 'ok?'
+        q = "SELECT getConfig('%s') AS res" % (data['name'])
+        res = self.sm.database.singleFieldQuerySync(q)
+        return res
 
     def setConfig(self, data, _id, _from, node):
-        sql = "Blah Blah Blah"
-        # self.SafeCall(sql,_id,_from,node)
+        q = "SELECT setConfig('%s','%s') AS res" % (data['name'], data['value'])
+        res = self.sm.database.singleFieldQuerySync(q)
+        return res
 
     def newFiscalYear(self, data, _id, _from, node):
-        pass
+        q = "SELECT newFiscalYear('%s','%s','%s') AS res" % (data['title'], data['start'], data['end'])
+        res = self.sm.database.singleFieldQuerySync(q)
+        return res
 
     def modifyFiscalYear(self, data, _id, _from, node):
-        pass
+        q = "SELECT modifyFiscalYear('%s','%s','%s','%s') AS res" % (
+            int(data['id']), data['title'], data['start'], data['end'])
+        res = self.sm.database.singleFieldQuerySync(q)
+        return res
 
     def closeFiscalYear(self, data, _id, _from, node):
-        pass
+        q = "SELECT closeFiscalYear('%s') AS res" % (int(data['id']))
+        res = self.sm.database.singleFieldQuerySync(q)
+        return res
 
     def removeFiscalYear(self, data, _id, _from, node):
-        pass
+        q = "SELECT removeFiscalYear('%s') AS res" % (int(data['id']))
+        res = self.sm.database.singleFieldQuerySync(q)
+        return res
 
     def newAccount(self, data, _id, _from, node):
-        pass
+        q = "SELECT newAccount('{0:s}','{1:s}','{2:s}','{3:s}','{4:s}','{5:s}','{6:s}','{7:s}','{8:s}','{9:s}','{10:s}','{11:s}','{12:s}','{13:s}') AS res".format(
+            data["parent"], data["type"], data["code"], data["title"], data["title2"], data["isactive"],
+            data["cashflowcategory"], data["openingbalance"], data["balancetype"], data["hasbaancetypecheck"],
+            data["hasdl"], data["hascurrency"], data["hascurrencyconversion"], data["hastracking"],
+            data["hastrackingcheck"])
+        res = self.sm.database.singleFieldQuerySync(q)
+        return res
 
     def modifyAccount(self, data, _id, _from, node):
-        pass
+        q = "SELECT modifyAccount('{0:s}','{1:s}','{2:s}','{3:s}','{4:s}','{5:s}',{6:s},'{7:s}','{8:s}','{9:s}','{10:s}','{11:s}','{12:s}','{13:s}') AS res".format(
+            data["id"], data["parent"], data["type"], data["code"], data["title"], data["title2"], data["isactive"],
+            data["cashflowcategory"], data["balancetype"], data["hasbaancetypecheck"], data["hasdl"],
+            data["hascurrency"], data["hascurrencyconversion"], data["hastracking"],
+            data["hastrackingcheck"])
+        res = self.sm.database.singleFieldQuerySync(q)
+        return res
 
     def removeAccount(self, data, _id, _from, node):
-        pass
+        q = "SELECT removeAccount('%s') AS res" % (int(data['id']))
+        res = self.sm.database.singleFieldQuerySync(q)
+        return res
 
     def newDl(self, data, _id, _from, node):
-        pass
+        q = "SELECT newDl('%s','%s','%s','%s','%s') AS res" % (
+            data['code'], data['title'], data['title2'], data['type'], data['isactive'])
+        res = self.sm.database.singleFieldQuerySync(q)
+        return res
 
     def modifyDL(self, data, _id, _from, node):
-        pass
+        q = "SELECT modifyDL('%s','%s','%s','%s','%s','%s') AS res" % (
+            data['id'], data['code'], data['title'], data['title2'], data['type'], data['isactive'])
+        res = self.sm.database.singleFieldQuerySync(q)
+        return res
 
     def removeDL(self, data, _id, _from, node):
-        pass
+        q = "SELECT removeDL('%s') AS res" % (data['id'])
+        res = self.sm.database.singleFieldQuerySync(q)
+        return res
 
     def activeDL(self, data, _id, _from, node):
-        pass
+        q = "SELECT activeDL('%s') AS res" % (data['id'])
+        res = self.sm.database.singleFieldQuerySync(q)
+        return res
 
     def deactiveDL(self, data, _id, _from, node):
-        pass
+        q = "SELECT deactiveDL('%s') AS res" % (data['id'])
+        res = self.sm.database.singleFieldQuerySync(q)
+        return res
 
     def newCategory(self, data, _id, _from, node):
-        pass
+        q = "SELECT newCategory('%s','%s','%s') AS res" % (data['title'], data['type'], data['category'])
+        res = self.sm.database.singleFieldQuerySync(q)
+        return res
 
     def modifyCategory(self, data, _id, _from, node):
-        pass
+        q = "SELECT modifyCategory('%s','%s','%s','%s') AS res" % (
+            data['id'], data['title'], data['type'], data['category'])
+        res = self.sm.database.singleFieldQuerySync(q)
+        return res
 
     def removeCategory(self, data, _id, _from, node):
-        pass
+        q = "SELECT removeCategory('%s') AS res" % (data['id'])
+        res = self.sm.database.singleFieldQuerySync(q)
+        return res
 
     def newTopic(self, data, _id, _from, node):
-        pass
+        q = "SELECT newTopic('%s','%s','%s') AS res" % (data['title'], data['parent'], data['category'])
+        res = self.sm.database.singleFieldQuerySync(q)
+        return res
 
     def modifyTopic(self, data, _id, _from, node):
-        pass
+        q = "SELECT modifyTopic('%s','%s','%s','%s') AS res" % (
+            data['id'], data['title'], data['parent'], data['category'])
+        res = self.sm.database.singleFieldQuerySync(q)
+        return res
 
     def removeTopic(self, data, _id, _from, node):
-        pass
+        q = "SELECT removeTopic('%s') AS res" % (
+            data['id'])
+        res = self.sm.database.singleFieldQuerySync(q)
+        return res
 
     def addAccountTopic(self, data, _id, _from, node):
-        pass
+        q = "SELECT addAccountTopic('%s','%s') AS res" % (
+            data['account'], data['topic'])
+        res = self.sm.database.singleFieldQuerySync(q)
+        return res
 
     def removeAccountTopic(self, data, _id, _from, node):
-        pass
+        q = "SELECT removeAccountTopic('%s','%s') AS res" % (
+            data['account'], data['topic'])
+        res = self.sm.database.singleFieldQuerySync(q)
+        return res
 
     def newVoucher(self, data, _id, _from, node):
-        pass
+        q = "SELECT newVoucher('%s','%s','%s','%s','%s','%s','%s','%s','%s') AS res" % (
+            data['number'], data['date'], data['referencenumber'], data['secondarynumber'], data['state'], data['type'],
+            data['description'], data['dailynumber'], data['issuersystem'])
+        res = self.sm.database.singleFieldQuerySync(q)
+        return res
 
     def modifyVoucher(self, data, _id, _from, node):
-        pass
+        q = "SELECT modifyVoucher('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s') AS res" % (
+            data['id'], data['number'], data['date'], data['referencenumber'], data['secondarynumber'], data['state'],
+            data['type'],
+            data['description'], data['dailynumber'], data['issuersystem'])
+        res = self.sm.database.singleFieldQuerySync(q)
+        return res
 
     def removeVoucher(self, data, _id, _from, node):
-        pass
+        q = "SELECT removeVoucher('%s') AS res" % (
+            data['id'])
+        res = self.sm.database.singleFieldQuerySync(q)
+        return res
 
     def finalizeVoucher(self, data, _id, _from, node):
-        pass
+        q = "SELECT finalizeVoucher('%s') AS res" % (
+            data['id'])
+        res = self.sm.database.singleFieldQuerySync(q)
+        return res
 
     def newVoucherItem(self, data, _id, _from, node):
-        pass
+        q = "SELECT newVoucherItem('{0:s}','{1:s}','{2:s}','{3:s}','{4:s}','{5:s}',{6:s},'{7:s}','{8:s}','{9:s}','{10:s}','{11:s}','{12:s}') AS res".format(
+            data["voucherid"], data["rownumber"], data["accountid"], data["dlid"], data["debit"], data["credit"],
+            data["currencyid"], data["currencyrate"], data["currencydebit"], data["currencycredit"],
+            data["trackingnumber"], data["trackingdate"], data["description"])
+        res = self.sm.database.singleFieldQuerySync(q)
+        return res
 
     def modifyVoucherItem(self, data, _id, _from, node):
-        pass
+        q = "SELECT modifyVoucherItem('{0:s}','{1:s}','{2:s}','{3:s}','{4:s}','{5:s}',{6:s},'{7:s}','{8:s}','{9:s}','{10:s}','{11:s}','{12:s}','{13:s'}) AS res".format(
+            data["id"], data["voucherid"], data["rownumber"], data["accountid"], data["dlid"], data["debit"],
+            data["credit"], data["currencyid"], data["currencyrate"], data["currencydebit"], data["currencycredit"],
+            data["trackingnumber"], data["trackingdate"], data["description"])
+        res = self.sm.database.singleFieldQuerySync(q)
+        return res
 
     def removeVoucherItem(self, data, _id, _from, node):
-        pass
+        q = "SELECT removeVoucherItem('%s') AS res" % (
+            data['id'])
+        res = self.sm.database.singleFieldQuerySync(q)
+        return res
 
     def newGLVoucher(self, data, _id, _from, node):
-        pass
+        q = "SELECT newGLVoucher('%s','%s') AS res" % (
+            data['number'], data['date'])
+        res = self.sm.database.singleFieldQuerySync(q)
+        return res
 
     def removeGLVoucher(self, data, _id, _from, node):
-        pass
+        q = "SELECT removeGLVoucher('%s') AS res" % (
+            data['id'])
+        res = self.sm.database.singleFieldQuerySync(q)
+        return res
 
     def newGLVoucherItem(self, data, _id, _from, node):
-        pass
+        q = "SELECT newGLVoucherItem('%s') AS res" % (
+            data['voucherid'])
+        res = self.sm.database.singleFieldQuerySync(q)
+        return res
 
     def removeGLVoucherItem(self, data, _id, _from, node):
-        pass
+        q = "SELECT removeGLVoucherItem('%s') AS res" % (
+            data['id'])
+        res = self.sm.database.singleFieldQuerySync(q)
+        return res
 
     def newCash(self, data, _id, _from, node):
-        pass
+        q = "SELECT newCash('%s','%s','%s','%s','%s','%s','%s') AS res" % (
+            data['title'], data['DL'], data['currency'], data['rate'], data['firstamount'], data['firstdate'],
+            data['balance'])
+        res = self.sm.database.singleFieldQuerySync(q)
+        return res
 
     def modifyCash(self, data, _id, _from, node):
-        pass
+        q = "SELECT modifyCash('%s','%s','%s','%s','%s','%s','%s','%s') AS res" % (
+            data['id'], data['title'], data['DL'], data['currency'], data['rate'], data['firstamount'],
+            data['firstdate'],
+            data['balance'])
+        res = self.sm.database.singleFieldQuerySync(q)
+        return res
 
     def removeCash(self, data, _id, _from, node):
-        pass
+        q = "SELECT removeCash('%s') AS res" % (
+            data['id'])
+        res = self.sm.database.singleFieldQuerySync(q)
+        return res
 
     def newCostCenter(self, data, _id, _from, node):
-        pass
+        q = "SELECT newCostCenter('%s','%s') AS res" % (
+            data['dlid'], data['type'])
+        res = self.sm.database.singleFieldQuerySync(q)
+        return res
 
     def modifyCostCenter(self, data, _id, _from, node):
-        pass
+        q = "SELECT modifyCostCenter('%s','%s','%s') AS res" % (
+            data['id'], data['dlid'], data['type'])
+        res = self.sm.database.singleFieldQuerySync(q)
+        return res
 
     def removeCostCenter(self, data, _id, _from, node):
-        pass
+        q = "SELECT removeCostCenter('%s') AS res" % (
+            data['id'])
+        res = self.sm.database.singleFieldQuerySync(q)
+        return res
 
     def newParty(self, data, _id, _from, node):
-        pass
+        q = "SELECT newParty('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s') AS res" % (
+            data["type"], data["subtype"], data["name"], data["lastname"], data["nameEng"], data["lastnameEng"],
+            data["economiccode"], data["identificationcode"], data["website"], data["email"], data["dlid"],
+            data["blacklist"])
+        res = self.sm.database.singleFieldQuerySync(q)
+        return res
 
     def modifyParty(self, data, _id, _from, node):
-        pass
+        q = "SELECT modifyParty('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s') AS res" % (
+            data["id"], data["type"], data["subtype"], data["name"], data["lastname"], data["nameEng"],
+            data["lastnameEng"],
+            data["economiccode"], data["identificationcode"], data["website"], data["email"], data["dlid"],
+            data["blacklist"])
+        res = self.sm.database.singleFieldQuerySync(q)
+        return res
 
     def removeParty(self, data, _id, _from, node):
-        pass
+        q = "SELECT removeParty('%s') AS res" % (
+            data['id'])
+        res = self.sm.database.singleFieldQuerySync(q)
+        return res
 
     def addPartyBlacklist(self, data, _id, _from, node):
-        pass
+        q = "SELECT addPartyBlacklist('%s') AS res" % (
+            data['id'])
+        res = self.sm.database.singleFieldQuerySync(q)
+        return res
 
     def removePartyBlacklist(self, data, _id, _from, node):
-        pass
+        q = "SELECT removePartyBlacklist('%s') AS res" % (
+            data['id'])
+        res = self.sm.database.singleFieldQuerySync(q)
+        return res
 
     def newBank(self, data, _id, _from, node):
-        pass
+        q = "SELECT newBank('%s','%s') AS res" % (
+            data['title'], data['logo'])
+        res = self.sm.database.singleFieldQuerySync(q)
+        return res
 
     def modifyBank(self, data, _id, _from, node):
-        pass
+        q = "SELECT modifyBank('%s','%s') AS res" % (
+            data['title'], data['logo'])
+        res = self.sm.database.singleFieldQuerySync(q)
+        return res
 
     def removeBank(self, data, _id, _from, node):
-        pass
+        q = "SELECT removeBank('%s') AS res" % (
+            data['id'])
+        res = self.sm.database.singleFieldQuerySync(q)
+        return res
 
     def newBankAccountType(self, data, _id, _from, node):
-        pass
+        q = "SELECT newBankAccountType('%s','%s') AS res" % (
+            data['title'], data['hascheque'])
+        res = self.sm.database.singleFieldQuerySync(q)
+        return res
 
     def modifyBankAccountType(self, data, _id, _from, node):
-        pass
+        q = "SELECT modifyBankAccountType('%s','%s','%s') AS res" % (
+            data['id'], data['title'], data['hascheque'])
+        res = self.sm.database.singleFieldQuerySync(q)
+        return res
 
     def removeBankAccountType(self, data, _id, _from, node):
-        pass
+        q = "SELECT removeBankAccountType('%s') AS res" % (
+            data['id'])
+        res = self.sm.database.singleFieldQuerySync(q)
+        return res
 
     def newBankAccount(self, data, _id, _from, node):
-        pass
+        q = "SELECT newBankAccount('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s') AS res" % (
+            data["bankbranchid"],
+            data["accountno"],
+            data["bankaccounttypeid"],
+            data["dlid"],
+            data["currencyid"],
+            data["rate "],
+            data["firstamount "],
+            data["firstdate "],
+            data["balance "],
+            data["billfirstamount "],
+            data["clearformatname "],
+            data["owner"],)
+        res = self.sm.database.singleFieldQuerySync(q)
+        return res
 
     def modifyBankAccount(self, data, _id, _from, node):
-        pass
+        q = "SELECT modifyBankAccount('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s') AS res" % (
+            data["id"], data["bankbranchid"],
+            data["accountno"],
+            data["bankaccounttypeid"],
+            data["dlid"],
+            data["currencyid"],
+            data["rate "],
+            data["firstamount "],
+            data["firstdate "],
+            data["balance "],
+            data["billfirstamount "],
+            data["clearformatname "],
+            data["owner"],)
+        res = self.sm.database.singleFieldQuerySync(q)
+        return res
 
     def removeBankAccount(self, data, _id, _from, node):
-        pass
+        q = "SELECT removeBankAccount('%s') AS res" % (
+            data['id'])
+        res = self.sm.database.singleFieldQuerySync(q)
+        return res
 
     def newBankBranch(self, data, _id, _from, node):
-        pass
+        q = "SELECT newBankBranch('%s','%s','%s','%s') AS res" % (
+            data['bankid'], data['code'], data['title'], data['locationid'])
+        res = self.sm.database.singleFieldQuerySync(q)
+        return res
 
     def modifyBankBranch(self, data, _id, _from, node):
-        pass
+        q = "SELECT modifyBankBranch('%s','%s','%s','%s','%s') AS res" % (
+            data['id'], data['bankid'], data['code'], data['title'], data['locationid'])
+        res = self.sm.database.singleFieldQuerySync(q)
+        return res
 
     def removeBankBranch(self, data, _id, _from, node):
-        pass
+        q = "SELECT removeBankBranch('%s') AS res" % (
+            data['id'])
+        res = self.sm.database.singleFieldQuerySync(q)
+        return res
 
     def newCurrency(self, data, _id, _from, node):
-        pass
+        q = "SELECT newCurrency('%s','%s','%s','%s','%s','%s') AS res" % (
+            data["title"],
+            data["exchangeunit"],
+            data["precisioncount"],
+            data["precisionname"],
+            data["precisionnameEng"],
+            data["sign"],)
+        res = self.sm.database.singleFieldQuerySync(q)
+        return res
 
     def modifyCurrency(self, data, _id, _from, node):
-        pass
+        q = "SELECT modifyCurrency('%s','%s','%s','%s','%s','%s','%s') AS res" % (
+            data["id"],
+            data["title"],
+            data["exchangeunit"],
+            data["precisioncount"],
+            data["precisionname"],
+            data["precisionnameEng"],
+            data["sign"])
+        res = self.sm.database.singleFieldQuerySync(q)
+        return res
 
     def removeCurrency(self, data, _id, _from, node):
-        pass
+        q = "SELECT removeCurrency('%s') AS res" % (
+            data['id'])
+        res = self.sm.database.singleFieldQuerySync(q)
+        return res
 
     def newCurrencyExchangeRate(self, data, _id, _from, node):
-        pass
+        q = "SELECT newCurrencyExchangeRate('%s','%s','%s') AS res" % (
+            data["currency"],
+            data["effectivedate"],
+            data["exchangerate"])
+        res = self.sm.database.singleFieldQuerySync(q)
+        return res
 
     def modifyCurrencyExchangeRate(self, data, _id, _from, node):
-        pass
+        q = "SELECT modifyCurrencyExchangeRate('%s','%s','%s','%s') AS res" % (
+            data["id"],
+            data["currency"],
+            data["effectivedate"],
+            data["exchangerate"])
+        res = self.sm.database.singleFieldQuerySync(q)
+        return res
 
     def removeCurrencyExchangeRate(self, data, _id, _from, node):
-        pass
+        q = "SELECT removeCurrencyExchangeRate('%s') AS res" % (
+            data['id'])
+        res = self.sm.database.singleFieldQuerySync(q)
+        return res
 
     def newLocation(self, data, _id, _from, node):
-        pass
+        q = "SELECT newLocation('%s','%s','%s','%s','%s','%s') AS res" % (
+            data["title"],
+            data["code"],
+            data["parent"],
+            data["type"],
+            data["ministryoffinancecode"],
+            data["ministryoffinancecodeoftownship"],)
+        res = self.sm.database.singleFieldQuerySync(q)
+        return res
 
     def modifyLocation(self, data, _id, _from, node):
-        pass
+        q = "SELECT modifyLocation('%s','%s','%s','%s','%s','%s','%s') AS res" % (
+            data["id"],
+            data["title"],
+            data["code"],
+            data["parent"],
+            data["type"],
+            data["ministryoffinancecode"],
+            data["ministryoffinancecodeoftownship"],)
+        res = self.sm.database.singleFieldQuerySync(q)
+        return res
 
     def removeLocation(self, data, _id, _from, node):
-        pass
+        q = "SELECT removeLocation('%s') AS res" % (
+            data['id'])
+        res = self.sm.database.singleFieldQuerySync(q)
+        return res
