@@ -38,8 +38,9 @@ class CommunicationMediator:
         del self.idList[cid]
         return dt
 
-    def runCallback(self, name, data, id):
-        self.sm.send(Communication.make_callback(node=name, _id=id, _from=self.sm.owner.getServiceName(), data=data))
+    def runCallback(self, name, data, id, success=True):
+        self.sm.send(Communication.make_callback(node=name, _id=id, _from=self.sm.owner.getServiceName(), data=data,
+                                                 success=success))
 
     def runEvent(self, name, data):
         self.sm.send(Communication.make_event(name, self.sm.owner.getServiceName(), data))

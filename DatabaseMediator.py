@@ -17,7 +17,7 @@ class DatabaseMediator:
 
     def wrapSqlCmd(self, sql):
         j = {'query': sql}
-        return json.dumps(j)
+        return json.dumps(j, ensure_ascii=False)
 
     def query(self, cmd):
         self.sm.communication.runCommand("database.query", self.wrapSqlCmd(cmd), cid=Communication.get_random_id())

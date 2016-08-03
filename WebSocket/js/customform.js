@@ -16,12 +16,6 @@ $(document).ready(function () {
                 title: 'Type',
                 required: true
 
-            },
-            category: {
-                type: 'number',
-                title: 'Category',
-                required: true
-
             }
         },
         onSubmit: function (errors, values) {
@@ -31,9 +25,10 @@ $(document).ready(function () {
             }
             else {
                 sendCMD('AccountingRelay.newCategory', {
+                    userid: 1,
                     title: values.title,
-                    type: parseInt(values.type),
-                    category: values.category
+                    type: parseInt(values.type)
+
                 });
             }
         }
@@ -128,6 +123,7 @@ $(document).ready(function () {
             }
             else {
                 sendCMD('AccountingRelay.newTopic', {
+                    userid: 1,
                     title: values.title,
                     parent: parseInt(values.parent),
                     category: values.category
@@ -375,6 +371,7 @@ var CBProcs = {
     "userman.listUsergroups": "List of UserGroups",
     "AccountingRelay.getConfig": "getConfig",
     "AccountingRelay.setConfig": "setConfig",
+    "AccountingRelay.newCategory": "newCategory",
     "userman.listUsergroupPermissions": "List of Usergroup Permissions"
 };
 
@@ -398,6 +395,10 @@ $(document).ready(function () {
     });
     $("#disconnect").click(function () {
         Socket.close();
+    });
+
+    $("#sendCMD").click(function () {
+        sendCMD($("#icmd").val(), JSON.parse($("#ijson").val()));
     });
     $("#login").click(function () {
         if (sessionid == -1) {

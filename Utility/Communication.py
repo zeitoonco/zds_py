@@ -24,10 +24,11 @@ class Communication:
                 "}")
 
     @staticmethod
-    def make_callback(node, data, _id="", _from=""):
+    def make_callback(node, data, _id="", _from="",success = True):
         return ('{"type" : "callback" , "node" : "' + node + '" ' +
                 ((', "id" : "' + _id + '" ') if len(_id) > 0 else "") +
                 ((', "from" : "' + _from + '" ') if len(_from) > 0 else "") +
+                (', "success" : true ' if success else ', "success" : false ') +
                 ((', "data" : ' + data + " ") if len(data) > 0 else "") +
                 "}")
 
