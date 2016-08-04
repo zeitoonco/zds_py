@@ -500,6 +500,8 @@ function CBProcessor(node, data) {//data is structure for sure. its childs can b
             break;
         case "undefined":
             console.log("CBP Err type '" + typeof(v) + "' for " + node);
+            var view = "<h1>" + v + " :</h1>" + CBPDrawer(data);
+            $("#data").html(view);
             break;
     }
 }

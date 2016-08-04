@@ -40,7 +40,7 @@ class AccountingRelay(CommunicationHandlerInterface.CommunicationHandlerInterfac
         # print "Ok"
         # raise Exception
         self.sm.communication.registerCommand(
-            '"AccountingRelay.getConfig","AccountingRelay.setConfig","AccountingRelay.newFiscalYear","AccountingRelay.modifyFiscalYear","AccountingRelay.closeFiscalYear","AccountingRelay.removeFiscalYear","AccountingRelay.newAccount","AccountingRelay.modifyAccount","AccountingRelay.removeAccount","AccountingRelay.newDl","AccountingRelay.modifyDL","AccountingRelay.removeDL","AccountingRelay.[de]activeDL","AccountingRelay.newCategory","AccountingRelay.modifyCategory","AccountingRelay.removeCategory","AccountingRelay.newTopic","AccountingRelay.modifyTopic","AccountingRelay.removeTopic","AccountingRelay.addAccountTopic","AccountingRelay.removeAccountTopic","AccountingRelay.newVoucher","AccountingRelay.modifyVoucher","AccountingRelay.removeVoucher","AccountingRelay.finalizeVoucher","AccountingRelay.newVoucherItem","AccountingRelay.modifyVoucherItem","AccountingRelay.removeVoucherItem","AccountingRelay.newGLVoucher","AccountingRelay.removeGLVoucher","AccountingRelay.newGLVoucherItem","AccountingRelay.removeGLVoucherItem","AccountingRelay.newCash","AccountingRelay.modifyCash","AccountingRelay.removeCash","AccountingRelay.newCostCenter","AccountingRelay.modifyCostCenter","AccountingRelay.removeCostCenter","AccountingRelay.newParty","AccountingRelay.modifyParty","AccountingRelay.removeParty","AccountingRelay.addPartyBlacklist","AccountingRelay.removePartyBlacklist","AccountingRelay.newBank","AccountingRelay.modifyBank","AccountingRelay.removeBank","AccountingRelay.newBankAccountType","AccountingRelay.modifyBankAccountType","AccountingRelay.removeBankAccountType","AccountingRelay.newBankAccount","AccountingRelay.modifyBankAccount","AccountingRelay.removeBankAccount","AccountingRelay.newBankBranch","AccountingRelay.modifyBankBranch","AccountingRelay.removeBankBranch","AccountingRelay.newCurrency","AccountingRelay.modifyCurrency","AccountingRelay.removeCurrency","AccountingRelay.newCurrencyExchangeRate","AccountingRelay.modifyCurrencyExchangeRate","AccountingRelay.removeCurrencyExchangeRate","AccountingRelay.newLocation","AccountingRelay.modifyLocation","AccountingRelay.removeLocation"')
+            '"AccountingRelay.getConfig","AccountingRelay.setConfig","AccountingRelay.newFiscalYear","AccountingRelay.modifyFiscalYear","AccountingRelay.closeFiscalYear","AccountingRelay.removeFiscalYear","AccountingRelay.newAccount","AccountingRelay.modifyAccount","AccountingRelay.removeAccount","AccountingRelay.newDl","AccountingRelay.modifyDL","AccountingRelay.removeDL","AccountingRelay.[de]activeDL","AccountingRelay.newCategory","AccountingRelay.modifyCategory","AccountingRelay.removeCategory","AccountingRelay.newTopic","AccountingRelay.modifyTopic","AccountingRelay.removeTopic","AccountingRelay.addAccountTopic","AccountingRelay.removeAccountTopic","AccountingRelay.newVoucher","AccountingRelay.modifyVoucher","AccountingRelay.removeVoucher","AccountingRelay.finalizeVoucher","AccountingRelay.newVoucherItem","AccountingRelay.modifyVoucherItem","AccountingRelay.removeVoucherItem","AccountingRelay.newGLVoucher","AccountingRelay.removeGLVoucher","AccountingRelay.newGLVoucherItem","AccountingRelay.removeGLVoucherItem","AccountingRelay.newCash","AccountingRelay.modifyCash","AccountingRelay.removeCash","AccountingRelay.newCostCenter","AccountingRelay.modifyCostCenter","AccountingRelay.removeCostCenter","AccountingRelay.newParty","AccountingRelay.modifyParty","AccountingRelay.removeParty","AccountingRelay.addPartyBlacklist","AccountingRelay.removePartyBlacklist","AccountingRelay.newBank","AccountingRelay.modifyBank","AccountingRelay.removeBank","AccountingRelay.newBankAccountType","AccountingRelay.modifyBankAccountType","AccountingRelay.removeBankAccountType","AccountingRelay.newBankAccount","AccountingRelay.modifyBankAccount","AccountingRelay.removeBankAccount","AccountingRelay.newBankBranch","AccountingRelay.modifyBankBranch","AccountingRelay.removeBankBranch","AccountingRelay.newCurrency","AccountingRelay.modifyCurrency","AccountingRelay.removeCurrency","AccountingRelay.newCurrencyExchangeRate","AccountingRelay.modifyCurrencyExchangeRate","AccountingRelay.removeCurrencyExchangeRate","AccountingRelay.newLocation","AccountingRelay.modifyLocation","AccountingRelay.removeLocation","AccountingRelay.query"')
 
     def getInstallInfo(self):
         info = InstallInfo()
@@ -265,6 +265,9 @@ class AccountingRelay(CommunicationHandlerInterface.CommunicationHandlerInterfac
         info.commands.append({"name": "AccountingRelay.removeLocation", "inputdatatype": "AccountingRelay.genericInput",
                               "inputdatatypeversion": 1, "outputdatatype": "AccountingRelay.genericOutput",
                               "outputdatatypeversion": 1})
+        info.commands.append({"name": "AccountingRelay.query", "inputdatatype": "AccountingRelay.genericInput",
+                              "inputdatatypeversion": 1, "outputdatatype": "AccountingRelay.genericOutput",
+                              "outputdatatypeversion": 1})
 
         return info.toJSON()
 
@@ -299,7 +302,7 @@ class AccountingRelay(CommunicationHandlerInterface.CommunicationHandlerInterfac
                      "newBankAccount", "modifyBankAccount", "removeBankAccount", "newBankBranch", "modifyBankBranch",
                      "removeBankBranch", "newCurrency", "modifyCurrency", "removeCurrency", "newCurrencyExchangeRate",
                      "modifyCurrencyExchangeRate", "removeCurrencyExchangeRate", "newLocation", "modifyLocation",
-                     "removeLocation","query"]
+                     "removeLocation", "query"]
         if callable(op) and str(node).replace(self.getServiceName(), '').replace('.', '') in whitelist:
             try:
                 res = op(data, _id, _from, node)
@@ -322,15 +325,18 @@ class AccountingRelay(CommunicationHandlerInterface.CommunicationHandlerInterfac
                 op = row[1].replace("'", "\\'").replace("\"", '\\"')
                 text = row[2].replace("'", "\\'").replace("\"", '\\"')
                 cond = row[3].replace("'", "\\'").replace("\"", '\\"')
-                query += ' "' + col+'" ' + ' ' + op + " '" + text + "' "
+                query += ' "' + col + '" ' + ' ' + op + " '" + text + "' "
                 if i < total:
                     query += cond + " "
         if 'order' in data:
-            query += " ORDER BY " + data['order'][0].replace("'", "\\'").replace("\"", '\\"') + " " + data['order'][0].replace("'", "\\'").replace("\"", '\\"')
+            query += " ORDER BY " + data['order'][0].replace("'", "\\'").replace("\"", '\\"') + " " + data['order'][
+                0].replace("'", "\\'").replace("\"", '\\"')
 
         if 'limit' in data:
             query += " LIMIT " + data['order'][0].replace("'", "\\'").replace("\"", '\\"')
         query += ";"
+        res = self.sm.database.querySync(query)
+        return res
 
     def getConfig(self, data, _id, _from, node):
         # return "okkkk + " + data['name']

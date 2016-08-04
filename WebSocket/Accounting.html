@@ -15,9 +15,15 @@
     <script type="text/javascript" src="jsonform/deps/opt/jsv.js"></script>
     <script type="text/javascript" src="jsonform/lib/jsonform.js"></script>
     <script type="text/javascript" src="toastr/toastr.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="datatables/datatables.css"/>
+    <script type="text/javascript" src="datatables/datatables.js"></script>
     <script type="text/javascript" src="js/customform.js"></script>
+
     <link rel="stylesheet" href="css/custom.css">
     <link rel="stylesheet" href="toastr/toastr.css">
+
+
 </head>
 <body>
 
@@ -93,7 +99,6 @@
                                                                 style="direction: ltr; text-align: left;" type="text"
                                                                 id="icmd"
                                                                 placeholder="CMD"><br>
-
                         </div>
                         <div class="form-group">
                             <label for="ijson">JSON</label><textarea class="form-control" rows="5"
@@ -132,11 +137,14 @@
                 <div role="tabpanel" class="tab-pane" id="Tables">...</div>
                 <div role="tabpanel" class="tab-pane" id="Version">...</div>
             </div>
-
+            <div class="row">
+                <div class="col-lg-12">
+                    <table id="dataoutput" class="display" width="100%"></table>
+                </div>
+            </div>
         </div>
     </div>
 
 </div><!-- /.container -->
-
 </body>
 </html>
