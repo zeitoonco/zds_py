@@ -490,15 +490,30 @@ function cbLogin(data) {
 
 function CBProcessor(node, data) {//data is structure for sure. its childs can be anything
     var v = CBProcs[node];
+
     switch (typeof(v)) {
         case "function":
             v(data);
             break;
-        case "string":
-            var view = "<h1>" + v + " :</h1>" + CBPDrawer(data);
-            $("#data").html(view);
-            break;
-        case "undefined":
+        default:
+            if (data.result) {
+                if ("columns" in data.result && "rows" in data.result) {
+                    col = [];
+                    var index;
+                    for (index = 0; index < data.result["columns"].length; ++index) {
+                        console.log(data.result["columns"][index]);
+                        col.push({"title": data.result["columns"][index].name});
+                    }
+                    $('#dataoutable').DataTable({
+                        data: data.result["rows"],
+                        destroy: true,
+                        columns: col
+                    });
+                } else {
+                    $('#dataouttext').text(data.result);
+                }
+            }
+
             console.log("CBP Err type '" + typeof(v) + "' for " + node);
             var view = "<h1>" + v + " :</h1>" + CBPDrawer(data);
             $("#data").html(view);

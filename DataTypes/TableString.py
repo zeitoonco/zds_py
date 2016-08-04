@@ -44,7 +44,16 @@ class DTTableString:
 
     # Equivalent to std::string toString(int indent = -1, std::string indentContent = defaultIndentContent) const
     def __repr__(self):
-        return json.dumps(self.jsonData)
+        return json.dumps(self.jsonData, ensure_ascii=False)
+
+    def __str__(self):
+        return json.dumps(self.jsonData, ensure_ascii=False)
+
+    def __add__(self, other):
+        return ''.join([self.__repr__(), other])
+
+    def __radd__(self, other):
+        return ''.join([other, self.__repr__()])
 
     def fromString(self, data):
         if isinstance(data, dict):
