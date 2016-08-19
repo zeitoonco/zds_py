@@ -73,7 +73,7 @@ class TCPClientProtocol(object, Protocol):
             data = TCPClient.pendingBuffs.get_nowait()
             if data:
                 data = data.encode('utf-8')
-                signature = (chr(12) + chr(26) + struct.pack("L", long(len(data))))
+                signature = (chr(12) + chr(26) + struct.pack("<L", long(len(data))))
                 self.send_is_busy = True
                 self.transport.write(signature + data)
                 self.send_is_busy = False
@@ -92,7 +92,7 @@ class TCPClientProtocol(object, Protocol):
             ci = 0
             while ci < nread:
                 if (nread - ci) > 6 and ord(data[ci + 0]) == 12 and ord(data[ci + 1]) == 26:  # New packet
-                    size = struct.unpack("L", data[ci + 2:ci + 6])[0]
+                    size = struct.unpack("<L", data[ci + 2:ci + 6])[0]
                     ci += 6
                     if (ci + size) <= nread:  # its whole
                         self._buff = data[ci:ci + size]
