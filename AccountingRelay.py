@@ -311,6 +311,8 @@ class AccountingRelay(CommunicationHandlerInterface.CommunicationHandlerInterfac
                   "getConfig": " '{userid}'::BIGINT, '{name}'::TEXT ",
                   "newFiscalYear": " '{userid}'::BIGINT, '{title}'::TEXT, '{start}'::DATE, '{end}'::DATE ",
                   "closeFiscalYear": " '{userid}'::BIGINT, '{id}'::BIGINT ",
+                  "removeFiscalYear": " '{userid}'::BIGINT, '{id}'::BIGINT ",
+                  "modifyFiscalYear": " '{userid}'::BIGINT, '{id}'::BIGINT, '{title}'::VARCHAR(250)",
                   "newAccount": " '{userid}'::BIGINT, '{parent}'::BIGINT, '{type}'::INTEGER, '{code}'::VARCHAR(40) , '{title}'::VARCHAR(250) , '{title2}'::VARCHAR(250) , '{isactive}'::BOOLEAN, '{cashflowcategory}'::INTEGER, '{openingbalance}'::NUMERIC(19, 4) , '{balancetype}'::INTEGER, '{hasbalancetypecheck}'::BOOLEAN, '{hasdl}'::BOOLEAN, '{hascurrency}'::BOOLEAN, '{hascurrencyconversion}'::BOOLEAN, '{hastracking}'::BOOLEAN, '{hastrackingcheck}'::BOOLEAN ",
                   "modifyAccount": " '{userid}'::BIGINT, '{id}'::BIGINT, '{parent}'::BIGINT, '{type}'::INTEGER, '{code}'::VARCHAR(40) , '{title}'::VARCHAR(250) , '{title2}'::VARCHAR(250) , '{isactive}'::BOOLEAN, '{cashflowcategory}'::INTEGER, '{balancetype}'::INTEGER, '{hasbalancetypecheck}'::BOOLEAN, '{hasdl}'::BOOLEAN, '{hascurrency}'::BOOLEAN, '{hascurrencyconversion}'::BOOLEAN, '{hastracking}'::BOOLEAN, '{hastrackingcheck}'::BOOLEAN ",
                   "removeAccount": " '{userid}'::BIGINT, '{id}'::BIGINT ",
@@ -384,7 +386,9 @@ class AccountingRelay(CommunicationHandlerInterface.CommunicationHandlerInterfac
                     raise NotImplementedError
                 self.sm.communication.runCallback(name=node, data='{"success":true,"result": ' + res + '}', id=_id)
             except Exception, e:
-                self.sm.communication.runCallback(name=node, data='{"success":false}', id=_id)
+                self.sm.communication.runCallback(name=node,
+                                                  data='{"success":false,"detail": ' + json.dumps(e.message) + '}',
+                                                  id=_id)
         else:
             raise NotImplementedError
 
@@ -410,7 +414,10 @@ class AccountingRelay(CommunicationHandlerInterface.CommunicationHandlerInterfac
                 col = row[0].replace("'", "\\'").replace("\"", '\\"')
                 op = row[1].replace("'", "\\'").replace("\"", '\\"')
                 text = row[2].replace("'", "\\'").replace("\"", '\\"')
-                cond = row[3].replace("'", "\\'").replace("\"", '\\"')
+                if len(row) > 3:
+                    cond = row[3].replace("'", "\\'").replace("\"", '\\"')
+                else:
+                    cond = ' '
                 query += ' "' + col + '" ' + ' ' + op + " '" + text + "' "
                 if i < total:
                     query += cond + " "
