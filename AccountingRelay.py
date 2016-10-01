@@ -3,6 +3,7 @@ import json
 import logging
 import os
 import re
+import time
 
 import CommunicationHandlerInterface
 from DataTypes.InstallInfo import InstallInfo
@@ -37,14 +38,8 @@ class AccountingRelay(CommunicationHandlerInterface.CommunicationHandlerInterfac
             json.dump("", outfile)
 
     def onEnable(self):
-        # # self.sm.database.query('CREATE TABLE "helloworldtest"(  id integer NOT NULL  ,name TEXT NOT NULL)')
-        # print "Running..."
-        # res = self.sm.database.querySync('SELECT * FROM "HelloWorldCHI".helloworldtest')
-        #
-        # print "Ok"
-        # raise Exception
         self.sm.communication.registerCommand(
-            '"AccountingRelay.getConfig","AccountingRelay.setConfig","AccountingRelay.newFiscalYear","AccountingRelay.modifyFiscalYear","AccountingRelay.closeFiscalYear","AccountingRelay.removeFiscalYear","AccountingRelay.newAccount","AccountingRelay.modifyAccount","AccountingRelay.removeAccount","AccountingRelay.newDl","AccountingRelay.modifyDL","AccountingRelay.removeDL","AccountingRelay.[de]activeDL","AccountingRelay.newCategory","AccountingRelay.modifyCategory","AccountingRelay.removeCategory","AccountingRelay.newTopic","AccountingRelay.modifyTopic","AccountingRelay.removeTopic","AccountingRelay.addAccountTopic","AccountingRelay.removeAccountTopic","AccountingRelay.newVoucher","AccountingRelay.modifyVoucher","AccountingRelay.removeVoucher","AccountingRelay.finalizeVoucher","AccountingRelay.newVoucherItem","AccountingRelay.modifyVoucherItem","AccountingRelay.removeVoucherItem","AccountingRelay.newGLVoucher","AccountingRelay.removeGLVoucher","AccountingRelay.newGLVoucherItem","AccountingRelay.removeGLVoucherItem","AccountingRelay.newCash","AccountingRelay.modifyCash","AccountingRelay.removeCash","AccountingRelay.newCostCenter","AccountingRelay.modifyCostCenter","AccountingRelay.removeCostCenter","AccountingRelay.newParty","AccountingRelay.modifyParty","AccountingRelay.removeParty","AccountingRelay.addPartyBlacklist","AccountingRelay.removePartyBlacklist","AccountingRelay.newBank","AccountingRelay.modifyBank","AccountingRelay.removeBank","AccountingRelay.newBankAccountType","AccountingRelay.modifyBankAccountType","AccountingRelay.removeBankAccountType","AccountingRelay.newBankAccount","AccountingRelay.modifyBankAccount","AccountingRelay.removeBankAccount","AccountingRelay.newBankBranch","AccountingRelay.modifyBankBranch","AccountingRelay.removeBankBranch","AccountingRelay.newCurrency","AccountingRelay.modifyCurrency","AccountingRelay.removeCurrency","AccountingRelay.newCurrencyExchangeRate","AccountingRelay.modifyCurrencyExchangeRate","AccountingRelay.removeCurrencyExchangeRate","AccountingRelay.newLocation","AccountingRelay.modifyLocation","AccountingRelay.removeLocation","AccountingRelay.query"')
+            '"AccountingRelay.getConfig","AccountingRelay.setConfig","AccountingRelay.newFiscalYear","AccountingRelay.modifyFiscalYear","AccountingRelay.closeFiscalYear","AccountingRelay.removeFiscalYear","AccountingRelay.newAccount","AccountingRelay.modifyAccount","AccountingRelay.removeAccount","AccountingRelay.newDL","AccountingRelay.modifyDL","AccountingRelay.removeDL","AccountingRelay.[de]activeDL","AccountingRelay.newCategory","AccountingRelay.modifyCategory","AccountingRelay.removeCategory","AccountingRelay.newTopic","AccountingRelay.modifyTopic","AccountingRelay.removeTopic","AccountingRelay.addAccountTopic","AccountingRelay.removeAccountTopic","AccountingRelay.newVoucher","AccountingRelay.modifyVoucher","AccountingRelay.removeVoucher","AccountingRelay.finalizeVoucher","AccountingRelay.newVoucherItem","AccountingRelay.modifyVoucherItem","AccountingRelay.removeVoucherItem","AccountingRelay.newGLVoucher","AccountingRelay.removeGLVoucher","AccountingRelay.newGLVoucherItem","AccountingRelay.removeGLVoucherItem","AccountingRelay.newCash","AccountingRelay.modifyCash","AccountingRelay.removeCash","AccountingRelay.newCostCenter","AccountingRelay.modifyCostCenter","AccountingRelay.removeCostCenter","AccountingRelay.newParty","AccountingRelay.modifyParty","AccountingRelay.removeParty","AccountingRelay.addPartyBlacklist","AccountingRelay.removePartyBlacklist","AccountingRelay.newBank","AccountingRelay.modifyBank","AccountingRelay.removeBank","AccountingRelay.newBankAccountType","AccountingRelay.modifyBankAccountType","AccountingRelay.removeBankAccountType","AccountingRelay.newBankAccount","AccountingRelay.modifyBankAccount","AccountingRelay.removeBankAccount","AccountingRelay.newBankBranch","AccountingRelay.modifyBankBranch","AccountingRelay.removeBankBranch","AccountingRelay.newCurrency","AccountingRelay.modifyCurrency","AccountingRelay.removeCurrency","AccountingRelay.newCurrencyExchangeRate","AccountingRelay.modifyCurrencyExchangeRate","AccountingRelay.removeCurrencyExchangeRate","AccountingRelay.newLocation","AccountingRelay.modifyLocation","AccountingRelay.removeLocation","AccountingRelay.query","AccountingRelay.createNewVocher","AccountingRelay.modifyNewVocher"')
 
     def getInstallInfo(self):
         info = InstallInfo()
@@ -82,7 +77,7 @@ class AccountingRelay(CommunicationHandlerInterface.CommunicationHandlerInterfac
         info.commands.append({"name": "AccountingRelay.removeAccount", "inputdatatype": "AccountingRelay.genericInput",
                               "inputdatatypeversion": 1, "outputdatatype": "AccountingRelay.genericOutput",
                               "outputdatatypeversion": 1})
-        info.commands.append({"name": "AccountingRelay.newDl", "inputdatatype": "AccountingRelay.genericInput",
+        info.commands.append({"name": "AccountingRelay.newDL", "inputdatatype": "AccountingRelay.genericInput",
                               "inputdatatypeversion": 1, "outputdatatype": "AccountingRelay.genericOutput",
                               "outputdatatypeversion": 1})
         info.commands.append({"name": "AccountingRelay.modifyDL", "inputdatatype": "AccountingRelay.genericInput",
@@ -273,6 +268,15 @@ class AccountingRelay(CommunicationHandlerInterface.CommunicationHandlerInterfac
                               "inputdatatypeversion": 1, "outputdatatype": "AccountingRelay.genericOutput",
                               "outputdatatypeversion": 1})
 
+        info.commands.append(
+            {"name": "AccountingRelay.createNewVocher", "inputdatatype": "AccountingRelay.genericInput",
+             "inputdatatypeversion": 1, "outputdatatype": "AccountingRelay.genericOutput",
+             "outputdatatypeversion": 1})
+        info.commands.append(
+            {"name": "AccountingRelay.modifyNewVocher", "inputdatatype": "AccountingRelay.genericInput",
+             "inputdatatypeversion": 1, "outputdatatype": "AccountingRelay.genericOutput",
+             "outputdatatypeversion": 1})
+
         return info.toJSON()
 
     def onConnect(self):
@@ -295,7 +299,7 @@ class AccountingRelay(CommunicationHandlerInterface.CommunicationHandlerInterfac
     def onCommand(self, node, data, _id, _from):
         op = getattr(self, str(node).replace(self.getServiceName(), '').replace('.', ''), None)
         whitelist = ["getConfig", "setConfig", "newFiscalYear", "modifyFiscalYear", "closeFiscalYear",
-                     "removeFiscalYear", "newAccount", "modifyAccount", "removeAccount", "newDl", "modifyDL",
+                     "removeFiscalYear", "newAccount", "modifyAccount", "removeAccount", "newDL", "modifyDL",
                      "removeDL", "activeDL", "deactiveDL", "newCategory", "modifyCategory", "removeCategory",
                      "newTopic", "modifyTopic", "removeTopic", "addAccountTopic", "removeAccountTopic", "newVoucher",
                      "modifyVoucher", "removeVoucher", "finalizeVoucher", "newVoucherItem", "modifyVoucherItem",
@@ -306,7 +310,7 @@ class AccountingRelay(CommunicationHandlerInterface.CommunicationHandlerInterfac
                      "newBankAccount", "modifyBankAccount", "removeBankAccount", "newBankBranch", "modifyBankBranch",
                      "removeBankBranch", "newCurrency", "modifyCurrency", "removeCurrency", "newCurrencyExchangeRate",
                      "modifyCurrencyExchangeRate", "removeCurrencyExchangeRate", "newLocation", "modifyLocation",
-                     "removeLocation", "query"]
+                     "removeLocation", "query", "createNewVocher", "modifyNewVocher"]
         caster = {"setConfig": " '{userid}'::BIGINT, '{name}'::TEXT, '{value}'::TEXT ",
                   "getConfig": " '{userid}'::BIGINT, '{name}'::TEXT ",
                   "newFiscalYear": " '{userid}'::BIGINT, '{title}'::TEXT, '{start}'::DATE, '{end}'::DATE ",
@@ -329,8 +333,8 @@ class AccountingRelay(CommunicationHandlerInterface.CommunicationHandlerInterfac
                   "removeTopic": " '{userid}'::BIGINT, '{id}'::BIGINT ",
                   "addAccountTopic": " '{userid}'::BIGINT, '{account}'::BIGINT, '{topic}'::BIGINT ",
                   "removeAccountTopic": " '{userid}'::BIGINT, '{account}'::BIGINT, '{topic}'::BIGINT ",
-                  "newVoucher": " '{userid}'::BIGINT, '{number}'::INTEGER, '{referencenumber}'::INTEGER, '{secondarynumber}'::INTEGER, '{dailynumber}'::INTEGER, '{Date}'::TIMESTAMP WITH TIME ZONE, '{type}'::INTEGER, '{description}'::CHARACTER VARYING(250) , '{fiscalyearid}'::BIGINT, '{state}'::INTEGER ",
-                  "modifyVoucher": " '{userid}'::BIGINT, '{id}'::BIGINT, '{number}'::INTEGER, '{referencenumber}'::INTEGER, '{secondarynumber}'::INTEGER, '{dailynumber}'::INTEGER, '{Date}'::TIMESTAMP WITH TIME ZONE, '{type}'::INTEGER, '{description}'::CHARACTER VARYING(250) , '{fiscalyearid}'::BIGINT, '{state}'::INTEGER ",
+                  "newVoucher": " '{userid}'::BIGINT, '{number}'::INTEGER, '{referencenumber}'::INTEGER, '{secondarynumber}'::INTEGER, '{dailynumber}'::INTEGER, '{date}'::TIMESTAMP WITH TIME ZONE, '{type}'::INTEGER, '{description}'::CHARACTER VARYING(250) , '{fiscalyearid}'::BIGINT, '{state}'::INTEGER ",
+                  "modifyVoucher": " '{userid}'::BIGINT, '{id}'::BIGINT, '{number}'::INTEGER, '{referencenumber}'::INTEGER, '{secondarynumber}'::INTEGER, '{dailynumber}'::INTEGER, '{date}'::TIMESTAMP WITH TIME ZONE, '{type}'::INTEGER, '{description}'::CHARACTER VARYING(250) , '{fiscalyearid}'::BIGINT, '{state}'::INTEGER ",
                   "removeVoucher": " '{userid}'::BIGINT, '{id}'::BIGINT ",
                   "finalizeVoucher": " '{userid}'::BIGINT, '{id}'::BIGINT ",
                   "newVoucherItem": " '{userid}'::BIGINT, '{voucherid}'::BIGINT, '{rownumber}'::INTEGER, '{accountid}'::BIGINT, '{dlid}'::BIGINT, '{debit}'::NUMERIC(19, 4) , '{credit}'::NUMERIC(19, 4) , '{currencyid}'::BIGINT, '{currencyrate}'::NUMERIC(26, 16) , '{currencydebit}'::NUMERIC(19, 4) , '{currencycredit}'::NUMERIC(19, 4) , '{trackingnumber}'::VARCHAR(40) , '{trackingdate}'::TIMESTAMPTZ, '{description}'::VARCHAR(250) ",
@@ -923,3 +927,177 @@ class AccountingRelay(CommunicationHandlerInterface.CommunicationHandlerInterfac
         #                                                      data['id'])
         #     res = self.sm.database.singleFieldQuerySync(q)
         #     return res
+
+    def createNewVocher(self, data, _id, _from, node, modify=False):
+
+        # data = json.loads(data)
+        if modify:
+            if 'id' not in data:
+                raise Exception("ZDSE#708$ - id field not present ")
+            if data['id'] <= 0:
+                raise Exception("ZDSE#718$ - id field should be positive ")
+        if 'number' not in data:
+            raise Exception("ZDSE#700$ - number field not present ")
+        if 'date' not in data:
+            raise Exception("ZDSE#701$ - date field not present ")
+        if 'referencenumber' not in data:
+            raise Exception("ZDSE#702$ - referencenumber field not present ")
+        if 'secondarynumber' not in data:
+            raise Exception("ZDSE#703$ - secondarynumber field not present ")
+        if 'state' not in data:
+            raise Exception("ZDSE#704$ - state field not present ")
+        if 'type' not in data:
+            raise Exception("ZDSE#705$ - type field not present ")
+        if 'description' not in data:
+            raise Exception("ZDSE#706$ - description field not present ")
+        if 'items' not in data:
+            raise Exception("ZDSE#707$ - items field not present ")
+
+        if data['number'] <= 0:
+            raise Exception("ZDSE#710$ - number field should be positive ")
+        if len(data['date']) <= 0:
+            raise Exception("ZDSE#711$ - date length should be positive ")
+        if time.strptime(data['date'], '%Y-%m-%d') <= 0:
+            raise Exception("ZDSE#711$ - date is not valid")
+        if data['referencenumber'] < 0:
+            raise Exception("ZDSE#712$ - referencenumber field should be positive ")
+        if data['secondarynumber'] < 0:
+            raise Exception("ZDSE#713$ - secondarynumber field should be positive ")
+        if data['state'] <= 0:
+            raise Exception("ZDSE#714$ - state field should be positive ")
+        if data['type'] <= 0:
+            raise Exception("ZDSE#715$ - type field should be positive ")
+        if len(data['description']) <= 0:
+            raise Exception("ZDSE#711$ - description length should be positive ")
+        if not isinstance(data['items'], list):
+            raise Exception("ZDSE#716$ - items field should be array ")
+        if len(data['items']) <= 0:
+            raise Exception("ZDSE#717$ - items should not be empty")
+        itemi = 0
+        totaldebit = 0
+        totalcredit = 0
+        for item in data['items']:
+            itemi += 1
+            item['debit'] = int(item['debit'])
+            item['credit'] = int(item['credit'])
+            if modify:
+                if 'id' not in item:
+                    raise Exception("ZDSE#727$ - id field not present in item " + str(itemi))
+                if item['id'] <= 0 and item['id'] != -99:
+                    raise Exception("ZDSE#741$ - id field should be positive in item " + str(itemi))
+            if 'accountid' not in item:
+                raise Exception("ZDSE#720$ - accountid field not present in item " + str(itemi))
+            if 'dlid' not in item:
+                raise Exception("ZDSE#721$ - dlid field not present in item " + str(itemi))
+            if 'debit' not in item:
+                raise Exception("ZDSE#722$ - debit field not present in item " + str(itemi))
+            if 'credit' not in item:
+                raise Exception("ZDSE#723$ - credit field not present in item " + str(itemi))
+            if 'trackingnumber' not in item:
+                raise Exception("ZDSE#724$ - trackingnumber field not present in item " + str(itemi))
+            if 'trackingdate' not in item:
+                raise Exception("ZDSE#725$ - trackingitem field not present in item " + str(itemi))
+            if 'description' not in item:
+                raise Exception("ZDSE#726$ - description field not present in item " + str(itemi))
+
+            if item['accountid'] <= 0:
+                raise Exception("ZDSE#730$ - accountid field should be positive in item " + str(itemi))
+            if len(item['trackingdate']) <= 0:
+                raise Exception("ZDSE#731$ - trackingdate length should be positive in item " + str(itemi))
+            if time.strptime(item['trackingdate'], '%Y-%m-%d') <= 0:
+                raise Exception("ZDSE#732$ - trackingdate is not valid in item " + str(itemi))
+            if item['dlid'] <= 0:
+                raise Exception("ZDSE#733$ - dlid field should be positive in item " + str(itemi))
+            if item['debit'] < 0:
+                raise Exception("ZDSE#734$ - debit field should be positive in item " + str(itemi))
+            if item['credit'] < 0:
+                raise Exception("ZDSE#735$ - credit field should be positive in item " + str(itemi))
+            if item['trackingnumber'] <= 0:
+                raise Exception("ZDSE#736$ - trackingnumber field should be positive in item " + str(itemi))
+            if len(item['description']) <= 0:
+                raise Exception("ZDSE#737$ - description length should be positive in item " + str(itemi))
+            if item['debit'] > 0 and item['credit'] > 0:
+                raise Exception("ZDSE#738$ - both debit and credit should not be positive in item " + str(itemi))
+            if item['debit'] == 0 and item['credit'] == 0:
+                raise Exception("ZDSE#739$ - both debit and credit should not be zero in item " + str(itemi))
+            totalcredit += item['credit']
+            totaldebit += item['debit']
+        if totalcredit != totaldebit:
+            raise Exception("ZDSE#740$ - debit sum and credit sum does not match")
+        caster = {
+            "newVoucher": " '{userid}'::BIGINT, '{number}'::INTEGER, '{referencenumber}'::INTEGER, '{secondarynumber}'::INTEGER, '{dailynumber}'::INTEGER, '{date}'::TIMESTAMP WITH TIME ZONE, '{type}'::INTEGER, '{description}'::CHARACTER VARYING(250) , '{fiscalyearid}'::BIGINT, '{state}'::INTEGER ",
+            "newVoucherItem": " '{userid}'::BIGINT, '{voucherid}'::BIGINT, '{rownumber}'::INTEGER, '{accountid}'::BIGINT, '{dlid}'::BIGINT, '{debit}'::NUMERIC(19, 4) , '{credit}'::NUMERIC(19, 4) , '{currencyid}'::BIGINT, '{currencyrate}'::NUMERIC(26, 16) , '{currencydebit}'::NUMERIC(19, 4) , '{currencycredit}'::NUMERIC(19, 4) , '{trackingnumber}'::VARCHAR(40) , '{trackingdate}'::TIMESTAMPTZ, '{description}'::VARCHAR(250) ",
+            "modifyVoucher": " '{userid}'::BIGINT, '{id}'::BIGINT, '{number}'::INTEGER, '{referencenumber}'::INTEGER, '{secondarynumber}'::INTEGER, '{dailynumber}'::INTEGER, '{date}'::TIMESTAMP WITH TIME ZONE, '{type}'::INTEGER, '{description}'::CHARACTER VARYING(250) , '{fiscalyearid}'::BIGINT, '{state}'::INTEGER ",
+            "modifyVoucherItem": " '{userid}'::BIGINT, '{id}'::BIGINT, '{voucherid}'::BIGINT, '{rownumber}'::INTEGER, '{accountid}'::BIGINT, '{dlid}'::BIGINT, '{debit}'::NUMERIC(19, 4) , '{credit}'::NUMERIC(19, 4) , '{currencyid}'::BIGINT, '{currencyrate}'::NUMERIC(26, 16) , '{currencydebit}'::NUMERIC(19, 4) , '{currencycredit}'::NUMERIC(19, 4) , '{trackingnumber}'::VARCHAR(40) , '{trackingdate}'::TIMESTAMPTZ, '{description}'::VARCHAR(250) ",
+
+        }
+        method = 'newVoucher'
+
+        senddata = {
+            "userid": data['userid'],
+            "number": data['number'],
+            "date": data['date'],
+            "referencenumber": data['referencenumber'],
+            "secondarynumber": 0,
+            "state": 1,
+            "type": 1,
+            "fiscalyearid": 0,
+            "dailynumber": 0,
+            "description": data['description']
+        }
+        if modify:
+            method = 'modifyVoucher'
+            senddata['id'] = data['id']
+        q = "SELECT %s(%s) AS res" % (
+            method, unicode(caster[method], "utf-8").format(**senddata))
+        stack = []
+        vocherid = self.sm.database.singleFieldQuerySync(q)
+        if modify:
+            vocherid = data['id']
+        try:
+            count = 0
+            for item in data['items']:
+                count += 1
+                method = 'newVoucherItem'
+                senddata = {
+                    "userid": data['userid'],
+                    "voucherid": vocherid,
+                    "rownumber": count,
+                    "accountid": item['accountid'],
+                    "dlid": item['dlid'],
+                    "debit": item['debit'],
+                    "credit": item['credit'],
+                    "currencyid": 1,
+                    "currencyrate": 1,
+                    "currencydebit": 0,
+                    "currencycredit": 0,
+                    "trackingnumber": 0,
+                    "trackingdate": "1970-01-01",
+                    "description": item['description']
+                }
+                if modify:
+                    method = 'modifyVoucherItem'
+                    senddata['id'] = item['id']
+                q = "SELECT %s(%s) AS res" % (
+                    method, unicode(caster[method], "utf-8").format(**senddata))
+                res = self.sm.database.singleFieldQuerySync(q)
+                if modify and res == '1':
+                    stack.append(item['id'])
+                else:
+                    stack.append(res)
+
+        except  Exception, e:
+            if not modify:
+                for item in stack:
+                    self.sm.database.query("DELETE FROM voucheritem WHERE voucheritemid = " + item)
+                self.sm.database.query("DELETE FROM voucher WHERE voucherid = " + vocherid)
+            raise Exception("ZDSE#750$ - Unable to insert voucher items : " + e.message)
+        if modify:
+            q = "UPDATE voucheritem  SET del = TRUE  WHERE voucherid = " + vocherid + " AND voucheritemid NOT IN (" + ','.join(
+                [str(x) for x in stack]) + ")"
+            self.sm.database.query(q)
+
+        return vocherid
+
+    def modifyNewVocher(self, data, _id, _from, node):
+        return self.createNewVocher(data, _id, _from, node, True)
