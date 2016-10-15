@@ -10,7 +10,7 @@ from DataTypes.InstallInfo import InstallInfo
 
 
 class AccountingRelay(CommunicationHandlerInterface.CommunicationHandlerInterface):
-    logger = logging.getLogger('HelloWorld')
+    logger = logging.getLogger('AccountingRelay')
 
     def getServiceName(self):
         return "AccountingRelay"
